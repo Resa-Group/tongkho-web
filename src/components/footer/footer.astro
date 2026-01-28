@@ -1,0 +1,167 @@
+---
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  company: {
+    title: 'Về chúng tôi',
+    links: [
+      { label: 'Giới thiệu', href: '/gioi-thieu' },
+      { label: 'Liên hệ', href: '/lien-he' },
+      { label: 'Tuyển dụng', href: '/tuyen-dung' },
+      { label: 'Điều khoản sử dụng', href: '/dieu-khoan' },
+      { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
+    ],
+  },
+  services: {
+    title: 'Dịch vụ',
+    links: [
+      { label: 'Mua bán nhà đất', href: '/mua-ban' },
+      { label: 'Cho thuê nhà đất', href: '/cho-thue' },
+      { label: 'Dự án bất động sản', href: '/du-an' },
+      { label: 'Tin tức thị trường', href: '/tin-tuc' },
+      { label: 'Công cụ tính toán', href: '/tien-ich' },
+    ],
+  },
+  support: {
+    title: 'Hỗ trợ',
+    links: [
+      { label: 'Hướng dẫn đăng tin', href: '/huong-dan-dang-tin' },
+      { label: 'Bảng giá dịch vụ', href: '/bang-gia' },
+      { label: 'Câu hỏi thường gặp', href: '/faq' },
+      { label: 'Quy định đăng tin', href: '/quy-dinh' },
+    ],
+  },
+};
+
+const contactInfo = {
+  company: 'RESA HOLDINGS',
+  address: 'Tầng 5, Tòa nhà ABC, 123 Nguyễn Văn Cừ, Long Biên, Hà Nội',
+  phone: '0987 654 321',
+  email: 'contact@tongkhobds.com',
+  hotline: '1900 xxxx xx',
+};
+
+const socialLinks = [
+  { name: 'Facebook', href: '#', icon: 'facebook' },
+  { name: 'Youtube', href: '#', icon: 'youtube' },
+  { name: 'Zalo', href: '#', icon: 'zalo' },
+];
+---
+
+<footer class="bg-secondary-900 text-white">
+  <div class="container-custom py-12 lg:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <!-- Company Info -->
+      <div class="lg:col-span-2">
+        <a href="/" class="inline-block mb-4">
+          <img src="/images/logo-light.webp" alt="TongkhoBDS.com" class="h-12 w-auto" />
+        </a>
+        <p class="text-secondary-400 mb-4 text-sm">
+          Tổng kho bất động sản lớn nhất Việt Nam. Hàng ngàn dữ liệu cập nhật liên tục,
+          bộ lọc thông minh giúp bạn tiết kiệm thời gian và tìm đúng bất động sản phù hợp.
+        </p>
+        <div class="space-y-2 text-sm">
+          <p class="font-semibold text-white">{contactInfo.company}</p>
+          <p class="text-secondary-400">
+            <span class="inline-block w-20 text-secondary-500">Địa chỉ:</span>
+            {contactInfo.address}
+          </p>
+          <p class="text-secondary-400">
+            <span class="inline-block w-20 text-secondary-500">Hotline:</span>
+            <a href={`tel:${contactInfo.phone}`} class="text-primary-400 hover:text-primary-300">
+              {contactInfo.hotline}
+            </a>
+          </p>
+          <p class="text-secondary-400">
+            <span class="inline-block w-20 text-secondary-500">Email:</span>
+            <a href={`mailto:${contactInfo.email}`} class="text-primary-400 hover:text-primary-300">
+              {contactInfo.email}
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer Links -->
+      <div>
+        <h4 class="font-semibold mb-4">{footerLinks.company.title}</h4>
+        <ul class="space-y-2">
+          {footerLinks.company.links.map((link) => (
+            <li>
+              <a href={link.href} class="text-secondary-400 hover:text-primary-400 transition-colors text-sm">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-4">{footerLinks.services.title}</h4>
+        <ul class="space-y-2">
+          {footerLinks.services.links.map((link) => (
+            <li>
+              <a href={link.href} class="text-secondary-400 hover:text-primary-400 transition-colors text-sm">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-4">{footerLinks.support.title}</h4>
+        <ul class="space-y-2">
+          {footerLinks.support.links.map((link) => (
+            <li>
+              <a href={link.href} class="text-secondary-400 hover:text-primary-400 transition-colors text-sm">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Social Links -->
+        <div class="mt-6">
+          <h4 class="font-semibold mb-3">Kết nối với chúng tôi</h4>
+          <div class="flex gap-3">
+            {socialLinks.map((social) => (
+              <a
+                href={social.href}
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-secondary-800 text-secondary-400 hover:bg-primary-500 hover:text-white transition-colors"
+                aria-label={social.name}
+              >
+                {social.icon === 'facebook' && (
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                  </svg>
+                )}
+                {social.icon === 'youtube' && (
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23 9.71a8.5 8.5 0 00-.91-4.13 2.92 2.92 0 00-1.72-1A78.36 78.36 0 0012 4.27a78.45 78.45 0 00-8.34.3 2.87 2.87 0 00-1.46.74c-.9.83-1 2.25-1.1 3.45a48.29 48.29 0 000 6.48 9.55 9.55 0 00.3 2 3.14 3.14 0 00.71 1.36 2.86 2.86 0 001.49.78 45.18 45.18 0 006.5.33c3.5.05 6.57 0 10.2-.46a2.9 2.9 0 001.53-.78 2.49 2.49 0 00.61-1 10.58 10.58 0 00.52-3.4c.04-.56.04-3.94.04-4.54zM9.74 14.85V8.66l5.92 3.11c-1.66.92-3.85 1.96-5.92 3.08z"/>
+                  </svg>
+                )}
+                {social.icon === 'zalo' && (
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <text x="2" y="18" font-size="12" font-weight="bold">Z</text>
+                  </svg>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="mt-12 pt-8 border-t border-secondary-800">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-secondary-500 text-sm">
+          © {currentYear} TongkhoBDS.com. Tất cả quyền được bảo lưu.
+        </p>
+        <div class="flex items-center gap-4 text-secondary-500 text-sm">
+          <span>Đã đăng ký Bộ Công Thương</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

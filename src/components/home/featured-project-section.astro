@@ -1,0 +1,310 @@
+---
+import { mockProjects } from '@/data/mock-properties';
+
+const projects = mockProjects;
+---
+
+<section class="py-16 lg:py-20 bg-white">
+  <div class="container-custom">
+    <!-- Section Header -->
+    <div class="flex items-center justify-between mb-12">
+      <h2 class="text-2xl lg:text-3xl font-bold text-secondary-800">Dự án</h2>
+      <a
+        href="/du-an"
+        class="group flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium transition-colors cursor-pointer"
+      >
+        Xem thêm
+        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Project Carousel -->
+    <div id="project-carousel" class="relative" data-carousel="slide">
+      <!-- Carousel wrapper -->
+      <div class="relative overflow-hidden">
+        {projects.map((project, index) => (
+          <div
+            class={`carousel-slide absolute inset-0 transition-all duration-700 ease-out ${index === 0 ? 'opacity-100 translate-x-0 scale-100 z-10' : 'opacity-0 translate-x-8 scale-95 z-0'}`}
+            data-carousel-item
+            data-index={index}
+          >
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+              <!-- Left: Stacked Images -->
+              <div class="relative h-[380px] lg:h-[450px]">
+                <!-- Back image (top-left) -->
+                <div class="carousel-img-back absolute top-0 left-0 w-[65%] aspect-[4/3] rounded-2xl overflow-hidden shadow-xl z-10 transition-all duration-700 delay-100">
+                  <img
+                    src={project.images[0]}
+                    alt={project.name}
+                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
+                <!-- Front image (bottom-right, overlapping) -->
+                <div class="carousel-img-front absolute bottom-0 right-0 w-[70%] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl z-20 border-4 border-white transition-all duration-700 delay-200">
+                  <img
+                    src={project.images[1] || project.thumbnail}
+                    alt={project.name}
+                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Right: Content -->
+              <div class="carousel-content">
+                <h3 class="text-2xl lg:text-3xl font-bold text-secondary-800 tracking-wide mb-5 transition-all duration-500 delay-150">
+                  {project.name.toUpperCase()}
+                </h3>
+
+                <!-- Description -->
+                <p class="text-secondary-600 leading-relaxed mb-8 text-sm lg:text-base transition-all duration-500 delay-200">
+                  <span class="font-semibold">Tổng quan {project.name}</span> Vị trí: {project.location}, {project.city}.
+                  Chủ đầu tư: {project.developer}. Tổng diện tích: {project.area}.
+                  Quy mô dự án: {project.totalUnits.toLocaleString()} căn hộ.
+                  Dự kiến bàn giao: {project.completionDate}
+                </p>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-3 gap-3 lg:gap-4 mb-8">
+                  <!-- Stat 1 -->
+                  <div class="text-center group/stat transition-all duration-500 delay-[250ms]">
+                    <div class="w-14 h-14 lg:w-16 lg:h-16 mx-auto mb-2 lg:mb-3 rounded-2xl bg-primary-50 border-2 border-primary-200 flex items-center justify-center group-hover/stat:border-primary-400 group-hover/stat:shadow-lg group-hover/stat:shadow-primary-100 transition-all duration-300">
+                      <svg class="w-7 h-7 lg:w-8 lg:h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <p class="text-secondary-500 text-xs mb-0.5">Căn hộ đang bán:</p>
+                    <p class="text-secondary-800 font-bold">{project.totalUnits.toLocaleString()}</p>
+                  </div>
+
+                  <!-- Stat 2 -->
+                  <div class="text-center group/stat transition-all duration-500 delay-[300ms]">
+                    <div class="w-14 h-14 lg:w-16 lg:h-16 mx-auto mb-2 lg:mb-3 rounded-2xl bg-primary-50 border-2 border-primary-200 flex items-center justify-center group-hover/stat:border-primary-400 group-hover/stat:shadow-lg group-hover/stat:shadow-primary-100 transition-all duration-300">
+                      <svg class="w-7 h-7 lg:w-8 lg:h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                      </svg>
+                    </div>
+                    <p class="text-secondary-500 text-xs mb-0.5">Tòa, phân khu:</p>
+                    <p class="text-secondary-800 font-bold">{project.towers || 'N/A'}</p>
+                  </div>
+
+                  <!-- Stat 3 -->
+                  <div class="text-center group/stat transition-all duration-500 delay-[350ms]">
+                    <div class="w-14 h-14 lg:w-16 lg:h-16 mx-auto mb-2 lg:mb-3 rounded-2xl bg-primary-50 border-2 border-primary-200 flex items-center justify-center group-hover/stat:border-primary-400 group-hover/stat:shadow-lg group-hover/stat:shadow-primary-100 transition-all duration-300">
+                      <svg class="w-7 h-7 lg:w-8 lg:h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <p class="text-secondary-500 text-xs mb-0.5">Diện tích dự án:</p>
+                    <p class="text-secondary-800 font-bold">{project.area}</p>
+                  </div>
+                </div>
+
+                <!-- CTA Button -->
+                <a
+                  href={`/du-an/${project.slug}`}
+                  class="inline-flex items-center justify-center px-8 py-3.5 bg-gradient-to-r from-primary-500 to-primary-400 text-white font-semibold rounded-full shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:from-primary-600 hover:to-primary-500 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+                >
+                  Tìm hiểu dự án
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <!-- Spacer for height -->
+        <div class="invisible">
+          <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div class="h-[380px] lg:h-[450px]"></div>
+            <div class="py-4">
+              <div class="h-8 mb-5"></div>
+              <div class="h-24 mb-8"></div>
+              <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="h-28"></div>
+                <div class="h-28"></div>
+                <div class="h-28"></div>
+              </div>
+              <div class="h-14"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slider controls -->
+      <button
+        type="button"
+        class="absolute top-[190px] lg:top-[225px] start-0 z-30 flex items-center justify-center -translate-x-2 cursor-pointer group focus:outline-none"
+        data-carousel-prev
+      >
+        <span class="inline-flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white shadow-lg border border-secondary-100 group-hover:shadow-xl group-hover:scale-110 group-active:scale-95 group-focus:ring-4 group-focus:ring-primary-100 transition-all duration-300">
+          <svg class="w-5 h-5 lg:w-6 lg:h-6 text-primary-500 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="absolute top-[190px] lg:top-[225px] end-0 lg:end-auto lg:start-[calc(50%-2rem)] z-30 flex items-center justify-center translate-x-2 lg:translate-x-0 cursor-pointer group focus:outline-none"
+        data-carousel-next
+      >
+        <span class="inline-flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white shadow-lg border border-secondary-100 group-hover:shadow-xl group-hover:scale-110 group-active:scale-95 group-focus:ring-4 group-focus:ring-primary-100 transition-all duration-300">
+          <svg class="w-5 h-5 lg:w-6 lg:h-6 text-primary-500 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+
+      <!-- Slider indicators -->
+      <div class="flex justify-center gap-2 mt-8">
+        {projects.map((_, index) => (
+          <button
+            type="button"
+            class={`h-2.5 rounded-full transition-all duration-500 cursor-pointer hover:bg-primary-400 ${index === 0 ? 'bg-primary-500 w-8' : 'bg-secondary-200 w-2.5'}`}
+            aria-current={index === 0 ? 'true' : 'false'}
+            aria-label={`Slide ${index + 1}`}
+            data-carousel-slide-to={index}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Slide enter from right */
+  .carousel-slide.slide-enter {
+    opacity: 0;
+    transform: translateX(50px) scale(0.95);
+  }
+
+  /* Slide exit to left */
+  .carousel-slide.slide-exit {
+    opacity: 0;
+    transform: translateX(-50px) scale(0.95);
+  }
+
+  /* Active slide */
+  .carousel-slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+</style>
+
+<script>
+  function initCarousel() {
+    const carousel = document.getElementById('project-carousel');
+    if (!carousel) return;
+
+    const items = carousel.querySelectorAll('[data-carousel-item]');
+    const prevBtn = carousel.querySelector('[data-carousel-prev]');
+    const nextBtn = carousel.querySelector('[data-carousel-next]');
+    const indicators = carousel.querySelectorAll('[data-carousel-slide-to]');
+
+    let currentIndex = 0;
+    let direction = 1; // 1 = next, -1 = prev
+    const totalItems = items.length;
+    let autoPlayInterval: ReturnType<typeof setInterval>;
+    let isAnimating = false;
+
+    function showSlide(index: number, dir: number = 1) {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      // Wrap around
+      if (index < 0) index = totalItems - 1;
+      if (index >= totalItems) index = 0;
+
+      const prevIndex = currentIndex;
+      currentIndex = index;
+      direction = dir;
+
+      // Animate out current slide
+      items.forEach((item, i) => {
+        const el = item as HTMLElement;
+
+        if (i === prevIndex && i !== currentIndex) {
+          // Exit animation
+          el.classList.remove('opacity-100', 'translate-x-0', 'scale-100', 'z-10');
+          el.classList.add('opacity-0', 'scale-95', 'z-0');
+          el.classList.add(direction > 0 ? '-translate-x-8' : 'translate-x-8');
+          el.classList.remove(direction > 0 ? 'translate-x-8' : '-translate-x-8');
+        } else if (i === currentIndex) {
+          // Enter animation
+          el.classList.remove('opacity-0', 'scale-95', 'z-0', '-translate-x-8', 'translate-x-8');
+          el.classList.add('opacity-100', 'translate-x-0', 'scale-100', 'z-10');
+        } else {
+          // Hidden
+          el.classList.add('opacity-0', 'scale-95', 'z-0');
+          el.classList.remove('opacity-100', 'translate-x-0', 'scale-100', 'z-10');
+        }
+      });
+
+      // Update indicators with animation
+      indicators.forEach((indicator, i) => {
+        const el = indicator as HTMLElement;
+        if (i === currentIndex) {
+          el.classList.remove('bg-secondary-200', 'w-2.5');
+          el.classList.add('bg-primary-500', 'w-8');
+          el.setAttribute('aria-current', 'true');
+        } else {
+          el.classList.add('bg-secondary-200', 'w-2.5');
+          el.classList.remove('bg-primary-500', 'w-8');
+          el.setAttribute('aria-current', 'false');
+        }
+      });
+
+      // Reset animation lock after transition
+      setTimeout(() => {
+        isAnimating = false;
+      }, 700);
+    }
+
+    function startAutoPlay() {
+      autoPlayInterval = setInterval(() => {
+        showSlide(currentIndex + 1, 1);
+      }, 5000);
+    }
+
+    function resetAutoPlay() {
+      clearInterval(autoPlayInterval);
+      startAutoPlay();
+    }
+
+    // Event listeners
+    prevBtn?.addEventListener('click', () => {
+      showSlide(currentIndex - 1, -1);
+      resetAutoPlay();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      showSlide(currentIndex + 1, 1);
+      resetAutoPlay();
+    });
+
+    indicators.forEach((indicator) => {
+      indicator.addEventListener('click', () => {
+        const index = parseInt(indicator.getAttribute('data-carousel-slide-to') || '0');
+        const dir = index > currentIndex ? 1 : -1;
+        showSlide(index, dir);
+        resetAutoPlay();
+      });
+    });
+
+    // Start auto-play
+    startAutoPlay();
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+    carousel.addEventListener('mouseleave', startAutoPlay);
+  }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', initCarousel);
+  // Also handle Astro view transitions
+  document.addEventListener('astro:page-load', initCarousel);
+</script>

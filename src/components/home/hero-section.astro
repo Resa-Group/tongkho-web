@@ -1,0 +1,32 @@
+---
+import HeroSearch from './hero-search';
+---
+
+<section class="relative min-h-[600px] lg:min-h-[700px] flex items-center">
+  <!-- Background Image -->
+  <div class="absolute inset-0">
+    <img
+      src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920&h=1080&fit=crop"
+      alt="Thành phố Việt Nam"
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative container-custom py-20 text-center text-white">
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+      <span class="text-primary-400">Tongkho</span>BDS.com
+    </h1>
+    <p class="text-xl md:text-2xl lg:text-3xl font-heading italic mb-4">
+      Tổng kho bất động sản lớn nhất Việt Nam
+    </p>
+    <p class="text-secondary-200 max-w-2xl mx-auto mb-10">
+      Hàng ngàn dữ liệu cập nhật liên tục, bộ lọc thông minh giúp bạn tiết kiệm thời gian
+      và tìm đúng bất động sản phù hợp.
+    </p>
+
+    <!-- Search Component (React) -->
+    <HeroSearch client:load />
+  </div>
+</section>

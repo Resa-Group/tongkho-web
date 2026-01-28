@@ -1,0 +1,78 @@
+---
+// Download app section - Customer app (orange) + Agent app (blue)
+const customerApp = {
+  title: 'Tìm thuê, mua bán đến đầu tư',
+  description: 'Tất cả bất động sản bạn cần đều có tại',
+  qrCode: '/images/download-app/qr-customer.webp',
+  phoneImage: '/images/download-app/phone-back.webp',
+  appStoreUrl: 'https://apps.apple.com/vn/app/tongkhobds-com-t%E1%BB%95ng-kho-bds/id6747106665',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=app.bds.com.android',
+};
+
+const agentApp = {
+  title: 'Dành cho môi giới → Trở thành đối tác',
+  description: 'Đăng tin không giới hạn, nhận quyền lợi độc quyền từ',
+  qrCode: '/images/download-app/qr-agent.webp',
+  phoneImage: '/images/download-app/phone-front.webp',
+  appStoreUrl: 'https://apps.apple.com/vn/app/tongkhobds-com-agent/id6747106732',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=app.bds.agent.android',
+};
+---
+
+<section class="py-8 pb-0 lg:pb-8">
+  <div class="container-custom">
+    <div class="download-box relative rounded-2xl overflow-visible">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <!-- Customer App (Orange) - Left -->
+        <div class="bg-primary-500 p-8 lg:p-10 lg:pr-32 min-h-[320px] flex flex-col justify-between">
+          <div>
+            <h3 class="text-2xl lg:text-3xl font-bold text-white italic mb-3">{customerApp.title}</h3>
+            <p class="text-white/90 text-base">
+              {customerApp.description}<br />
+              <a href="/" class="text-white font-semibold hover:underline">TongkhoBDS.com</a>
+            </p>
+          </div>
+          <div class="flex items-end gap-4 mt-6">
+            <img src={customerApp.qrCode} alt="QR Code" class="w-24 h-24 rounded-lg" />
+            <div class="flex flex-col gap-2">
+              <a href={customerApp.appStoreUrl} target="_blank" rel="noopener" class="block bg-white rounded-lg overflow-hidden">
+                <img src="/images/download-app/appstore.png" alt="App Store" class="h-10" />
+              </a>
+              <a href={customerApp.playStoreUrl} target="_blank" rel="noopener" class="block bg-white rounded-lg overflow-hidden">
+                <img src="/images/download-app/googleplay.png" alt="Google Play" class="h-10" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agent App (Blue) - Right -->
+        <div class="bg-[#1e4b8e] p-8 lg:p-10 lg:pl-32 min-h-[320px] flex flex-col justify-between">
+          <div class="lg:text-right">
+            <h3 class="text-2xl lg:text-3xl font-bold text-white italic mb-3">{agentApp.title}</h3>
+            <p class="text-white/90 text-base">
+              {agentApp.description}<br />
+              <a href="/" class="text-white font-semibold hover:underline">TongkhoBDS.com</a>
+            </p>
+          </div>
+          <div class="flex items-end gap-4 mt-6 lg:justify-end">
+            <div class="flex flex-col gap-2 order-2 lg:order-1">
+              <a href={agentApp.appStoreUrl} target="_blank" rel="noopener" class="block bg-white rounded-lg overflow-hidden">
+                <img src="/images/download-app/appstore.png" alt="App Store" class="h-10" />
+              </a>
+              <a href={agentApp.playStoreUrl} target="_blank" rel="noopener" class="block bg-white rounded-lg overflow-hidden">
+                <img src="/images/download-app/googleplay.png" alt="Google Play" class="h-10" />
+              </a>
+            </div>
+            <img src={agentApp.qrCode} alt="QR Code" class="w-24 h-24 rounded-lg order-1 lg:order-2" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Center phones overlay -->
+      <div class="absolute left-1/2 bottom-0 -translate-x-1/2 z-10 hidden lg:flex items-end justify-center pointer-events-none">
+        <img src={customerApp.phoneImage} alt="Customer App" class="h-[480px] object-contain -mr-16 relative z-10" />
+        <img src={agentApp.phoneImage} alt="Agent App" class="h-[520px] object-contain relative z-20" />
+      </div>
+    </div>
+  </div>
+</section>

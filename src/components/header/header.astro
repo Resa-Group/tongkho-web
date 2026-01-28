@@ -1,0 +1,88 @@
+---
+import { mainNavItems } from './header-nav-data';
+import HeaderMobileMenu from './header-mobile-menu';
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+  <div class="container-custom">
+    <nav class="flex items-center justify-between h-16 lg:h-20">
+      <!-- Logo -->
+      <a href="/" class="flex items-center">
+        <img src="/images/logo.webp" alt="TongkhoBDS.com" class="h-10 lg:h-12 w-auto" />
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden xl:flex items-center gap-4 flex-nowrap">
+        {mainNavItems.map((item) => (
+          <div class="relative group">
+            <a
+              href={item.href}
+              class="flex items-center gap-1 py-2 text-secondary-700 hover:text-primary-500 transition-colors font-medium text-sm whitespace-nowrap"
+            >
+              {item.label}
+              {item.children && (
+                <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              )}
+            </a>
+            {item.children && (
+              <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div class="bg-white rounded-xl shadow-xl border border-secondary-100 py-2 min-w-[200px]">
+                  {item.children.map((child) => (
+                    <a
+                      href={child.href}
+                      class="block px-4 py-2 text-secondary-600 hover:text-primary-500 hover:bg-primary-50 transition-colors"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <!-- Auth Buttons -->
+      <div class="hidden xl:flex items-center gap-3 flex-nowrap">
+        <a href="/dang-nhap" class="text-secondary-700 hover:text-primary-500 font-medium transition-colors text-sm whitespace-nowrap">
+          Đăng nhập
+        </a>
+        <a href="/dang-ky" class="text-secondary-700 hover:text-primary-500 font-medium transition-colors text-sm whitespace-nowrap">
+          Đăng ký
+        </a>
+        <a href="/dang-tin" class="btn btn-outline text-sm py-2 px-4 whitespace-nowrap">
+          Đăng tin
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-btn"
+        class="xl:hidden p-2 text-secondary-700 hover:text-primary-500"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu (React component for interactivity) -->
+  <HeaderMobileMenu client:load navItems={mainNavItems} />
+</header>
+
+<!-- Spacer to prevent content from going under fixed header -->
+<div class="h-16 lg:h-20"></div>
+
+<script>
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+    document.body.classList.toggle('overflow-hidden');
+  });
+</script>

@@ -1,0 +1,34 @@
+---
+import MainLayout from '@layouts/main-layout.astro';
+import HeroSection from '@components/home/hero-section.astro';
+import FeaturedProjectSection from '@components/home/featured-project-section.astro';
+import PropertiesSection from '@components/home/properties-section.astro';
+import LocationsSection from '@components/home/locations-section.astro';
+import NewsSection from '@components/home/news-section.astro';
+import PartnersSection from '@components/home/partners-section.astro';
+import DownloadAppSection from '@components/home/download-app-section.astro';
+import { mockPropertiesForSale, mockPropertiesForRent } from '@/data/mock-properties';
+---
+
+<MainLayout
+  title="Tổng Kho Bất Động Sản - Mua Bán, Cho Thuê, Dự Án Mới Nhất"
+  description="TongkhoBDS.com - Tổng kho bất động sản lớn nhất Việt Nam. Mua bán, cho thuê nhà đất, căn hộ, biệt thự với hàng ngàn tin đăng cập nhật mỗi ngày."
+>
+  <HeroSection />
+  <FeaturedProjectSection />
+  <PropertiesSection
+    title="Bất động sản đang bán"
+    properties={mockPropertiesForSale}
+    viewAllLink="/mua-ban"
+  />
+  <PropertiesSection
+    title="Bất động sản cho thuê"
+    properties={mockPropertiesForRent}
+    viewAllLink="/cho-thue"
+    variant="warm"
+  />
+  <LocationsSection />
+  <PartnersSection />
+  <DownloadAppSection />
+  <NewsSection />
+</MainLayout>
