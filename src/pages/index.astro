@@ -28,7 +28,14 @@ import { mockPropertiesForSale, mockPropertiesForRent } from '@/data/mock-proper
     variant="warm"
   />
   <LocationsSection />
-  <PartnersSection />
-  <DownloadAppSection />
+
+  <!-- Partners & Download App combined section -->
+  <div class="relative bg-secondary-800 pb-56 lg:pb-72">
+    <PartnersSection />
+  </div>
+  <div class="relative -mt-56 lg:-mt-72 z-10">
+    <DownloadAppSection />
+  </div>
+
   <NewsSection />
 </MainLayout>
