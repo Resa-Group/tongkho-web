@@ -1,9 +1,9 @@
 ---
 // Hero search form with tabs and filters
-import { propertyTypes } from "@components/header/header-nav-data";
 import PriceRangeDropdown from "@components/ui/price-range-dropdown.astro";
 import AreaRangeDropdown from "@components/ui/area-range-dropdown.astro";
 import LocationDropdown from "@components/ui/location-dropdown.astro";
+import PropertyTypeDropdown from "@components/ui/property-type-dropdown.astro";
 
 const tabs = [
   { id: "sale", label: "Mua bán", path: "/mua-ban" },
@@ -70,18 +70,9 @@ const tabs = [
     </div>
 
     <!-- Advanced Filters -->
-    <div class="flex flex-col md:flex-row gap-2 mt-2" data-filters>
+    <div class="flex flex-col md:flex-row gap-2 mt-2 overflow-visible" data-filters>
       <!-- Property Type -->
-      <select
-        name="type"
-        class="flex-1 px-3 py-2.5 border border-secondary-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 text-secondary-600 text-sm"
-        data-type-select
-      >
-        <option value="">Loại mua bán</option>
-        {propertyTypes.map((type) => (
-          <option value={type.value}>{type.label}</option>
-        ))}
-      </select>
+      <PropertyTypeDropdown />
 
       <!-- Price Range Dropdown -->
       <PriceRangeDropdown />
@@ -99,7 +90,7 @@ const tabs = [
     const form = container.querySelector('[data-search-form]') as HTMLFormElement;
     const tabInput = container.querySelector('[data-tab-input]') as HTMLInputElement;
     const filters = container.querySelector('[data-filters]') as HTMLDivElement;
-    const typeSelect = container.querySelector('[data-type-select]') as HTMLSelectElement;
+    const propertyDropdown = container.querySelector('[data-property-dropdown]') as HTMLElement;
     const keywordInput = container.querySelector('[data-keyword-input]') as HTMLInputElement;
     const locationDropdown = container.querySelector('[data-location-dropdown]') as HTMLElement;
 
@@ -135,11 +126,13 @@ const tabs = [
           filters.classList.remove('hidden');
         }
 
-        // Update type select label
-        if (typeSelect) {
-          const firstOption = typeSelect.querySelector('option[value=""]');
-          if (firstOption) {
-            firstOption.textContent = activeTab === 'rent' ? 'Loại cho thuê' : 'Loại mua bán';
+        // Update property type dropdown placeholder based on tab
+        if (propertyDropdown) {
+          const display = propertyDropdown.querySelector('[data-display]') as HTMLSpanElement;
+          const input = propertyDropdown.querySelector('[data-input]') as HTMLInputElement;
+          // Only update if no selection
+          if (!input?.value && display) {
+            display.textContent = activeTab === 'rent' ? 'Loại cho thuê' : 'Loại mua bán';
           }
         }
       });
