@@ -169,6 +169,221 @@ const [c, setC] = useState();
 
 ---
 
+## Component Reusability (DRY Principle)
+
+### Before Creating New Components
+**ALWAYS check existing components before creating new ones.** This is critical to maintaining a clean, maintainable codebase.
+
+#### Discovery Checklist
+Before implementing a new component, verify:
+
+1. **Search existing components:**
+   - Check `src/components/` directory structure
+   - Use `grep` to search for similar component names
+   - Review component props to see if variations exist
+
+2. **Analyze component structure:**
+   - Do existing components have similar HTML structure?
+   - Do they render the same data types?
+   - Are the styling patterns identical or very similar?
+
+3. **Consider parameterization:**
+   - Can props handle different use cases?
+   - Would conditional rendering solve the problem?
+   - Can a single component accept variant props?
+
+#### Example: SidebarFilterList Pattern
+Instead of creating separate `PriceFilter` and `AreaFilter` components:
+
+```typescript
+// ❌ BAD - Duplicate components
+// src/components/filters/price-filter.astro
+// src/components/filters/area-filter.astro
+// Both have identical structure, just different labels/data
+
+// ✅ GOOD - Single reusable component with props
+interface Props {
+  title: string;           // "Giá" vs "Diện tích"
+  items: FilterItem[];     // Price ranges vs area ranges
+  onSelect?: (item: FilterItem) => void;
+  selectedId?: string;
+}
+
+export function SidebarFilterList({ title, items, onSelect, selectedId }: Props) {
+  return (
+    <div class="sidebar-filter">
+      <h3 class="filter-title">{title}</h3>
+      <ul class="filter-list">
+        {items.map((item) => (
+          <li key={item.id}>
+            <button
+              class:list={['filter-item', { active: item.id === selectedId }]}
+              onClick={() => onSelect?.(item)}
+            >
+              {item.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+Usage in parent component:
+```typescript
+<SidebarFilterList
+  title="Giá"
+  items={priceRanges}
+  selectedId={selectedPrice}
+  onSelect={(item) => setSelectedPrice(item.id)}
+/>
+
+<SidebarFilterList
+  title="Diện tích"
+  items={areaRanges}
+  selectedId={selectedArea}
+  onSelect={(item) => setSelectedArea(item.id)}
+/>
+```
+
+### Refactoring Duplicate Components
+
+#### Step 1: Identify Similarities
+Compare components side-by-side:
+
+| Aspect | Component A | Component B | Difference? |
+|---|---|---|---|
+| HTML Structure | List of items | List of items | ✓ Same |
+| Props | `items`, `title` | `items`, `title` | ✓ Same |
+| Styling | Tailwind grid | Tailwind grid | ✓ Same |
+| Behavior | Click handler | Click handler | ✓ Same |
+
+#### Step 2: Extract Common Props Interface
+```typescript
+// ✅ Shared interface
+interface FilterListProps<T> {
+  title: string;
+  items: T[];
+  onItemClick?: (item: T) => void;
+  getLabel: (item: T) => string;
+  getId: (item: T) => string;
+  isSelected?: (item: T) => boolean;
+}
+```
+
+#### Step 3: Create Single Reusable Component
+```typescript
+export function FilterList<T>({
+  title,
+  items,
+  onItemClick,
+  getLabel,
+  getId,
+  isSelected,
+}: FilterListProps<T>) {
+  return (
+    <div class="filter-list">
+      <h3 class="filter-title">{title}</h3>
+      <ul class="filter-items">
+        {items.map((item) => (
+          <li key={getId(item)}>
+            <button
+              class:list={[
+                'filter-item',
+                { active: isSelected?.(item) },
+              ]}
+              onClick={() => onItemClick?.(item)}
+            >
+              {getLabel(item)}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+#### Step 4: Delete Old Components
+Remove duplicate component files after verifying all usages have been updated.
+
+### Variant Props vs Multiple Components
+
+**Use variant props when:**
+- Components differ only in styling (colors, sizes)
+- Behavior is identical
+- Same data structure
+
+```typescript
+interface Props {
+  variant: 'primary' | 'secondary' | 'ghost';
+  size: 'sm' | 'md' | 'lg';
+}
+
+export function Button({ variant = 'primary', size = 'md' }: Props) {
+  const variantStyles = {
+    primary: 'bg-primary-500 text-white',
+    secondary: 'bg-secondary-500 text-white',
+    ghost: 'bg-transparent border border-gray-300',
+  };
+
+  const sizeStyles = {
+    sm: 'px-3 py-1 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+  };
+
+  return (
+    <button class={`${variantStyles[variant]} ${sizeStyles[size]}`}>
+      {/* Content */}
+    </button>
+  );
+}
+```
+
+**Create separate components when:**
+- Structure is fundamentally different
+- Props are incompatible
+- Use cases are unrelated
+
+### Composition Over Duplication
+
+Combine smaller, focused components to create complex layouts:
+
+```typescript
+// ✅ Good composition
+export function PropertyFilters() {
+  return (
+    <div class="filters">
+      <FilterList title="Loại" items={propertyTypes} />
+      <FilterList title="Giá" items={priceRanges} />
+      <FilterList title="Diện tích" items={areaRanges} />
+    </div>
+  );
+}
+```
+
+Not:
+```typescript
+// ❌ Bad - Separate components for same pattern
+<PropertyTypeFilter />
+<PriceFilter />
+<AreaFilter />
+```
+
+### Component Checklist Before Implementation
+
+- [ ] Searched existing components for similar patterns
+- [ ] Checked if variant props could solve the problem
+- [ ] Verified props and data structure compatibility
+- [ ] Documented reusable props interface
+- [ ] Removed any duplicate components
+- [ ] Updated all usages of old components
+- [ ] Tested new component with multiple data sets
+
+---
+
 ## Data Structure Patterns
 
 ### Mock Data Organization
