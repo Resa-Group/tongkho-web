@@ -34,8 +34,10 @@ const footerLinks = {
 };
 
 const contactInfo = {
+  type: 'SÀN GIAO DỊCH BẤT ĐỘNG SẢN',
   company: 'RESA HOLDINGS',
-  address: 'Tầng 5, Tòa nhà ABC, 123 Nguyễn Văn Cừ, Long Biên, Hà Nội',
+  address: 'Tầng 7, tòa nhà Văn Hoa, số 51 Kim Mã, Phường Ngọc Khánh, Quận Ba Đình, Thành phố Hà Nội',
+  representative: 'Vương Đình Công - Giám đốc',
   phone: '0987 654 321',
   email: 'contact@tongkhobds.com',
   hotline: '1900 xxxx xx',
@@ -61,19 +63,24 @@ const socialLinks = [
           bộ lọc thông minh giúp bạn tiết kiệm thời gian và tìm đúng bất động sản phù hợp.
         </p>
         <div class="space-y-2 text-sm">
-          <p class="font-semibold text-white">{contactInfo.company}</p>
+          <p class="text-primary-400 font-medium">{contactInfo.type}</p>
+          <p class="font-semibold text-white text-base">{contactInfo.company}</p>
           <p class="text-secondary-400">
-            <span class="inline-block w-20 text-secondary-500">Địa chỉ:</span>
+            <span class="inline-block w-24 text-secondary-500">Địa chỉ:</span>
             {contactInfo.address}
           </p>
           <p class="text-secondary-400">
-            <span class="inline-block w-20 text-secondary-500">Hotline:</span>
+            <span class="inline-block w-24 text-secondary-500">Đại diện:</span>
+            {contactInfo.representative}
+          </p>
+          <p class="text-secondary-400">
+            <span class="inline-block w-24 text-secondary-500">Hotline:</span>
             <a href={`tel:${contactInfo.phone}`} class="text-primary-400 hover:text-primary-300">
               {contactInfo.hotline}
             </a>
           </p>
           <p class="text-secondary-400">
-            <span class="inline-block w-20 text-secondary-500">Email:</span>
+            <span class="inline-block w-24 text-secondary-500">Email:</span>
             <a href={`mailto:${contactInfo.email}`} class="text-primary-400 hover:text-primary-300">
               {contactInfo.email}
             </a>
@@ -158,8 +165,19 @@ const socialLinks = [
         <p class="text-secondary-500 text-sm">
           © {currentYear} TongkhoBDS.com. Tất cả quyền được bảo lưu.
         </p>
-        <div class="flex items-center gap-4 text-secondary-500 text-sm">
-          <span>Đã đăng ký Bộ Công Thương</span>
+        <div class="flex items-center gap-4">
+          <a
+            href="http://online.gov.vn/Website/chi-tiet-138507?AspxAutoDetectCookieSupport=1"
+            rel="nofollow noopener"
+            target="_blank"
+            class="inline-block hover:opacity-80 transition-opacity"
+          >
+            <img
+              src="/images/da-dang-ky-bct.svg"
+              alt="Đã đăng ký Bộ Công Thương"
+              class="h-12 w-auto"
+            />
+          </a>
         </div>
       </div>
     </div>

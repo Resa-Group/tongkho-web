@@ -18,7 +18,7 @@ const duplicatedPartners = [...partners, ...partners, ...partners];
         {duplicatedPartners.map((partner) => (
           <a
             href={`/chu-dau-tu/${partner.slug}`}
-            class="partner-item flex-shrink-0 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+            class="partner-item flex-shrink-0 bg-white rounded-xl p-4 shadow-xs hover:shadow-md transition-shadow"
           >
             <img
               src={partner.image}
@@ -32,27 +32,3 @@ const duplicatedPartners = [...partners, ...partners, ...partners];
     </div>
   </div>
 </section>
-
-<style>
-  .partners-track {
-    animation: scroll 30s linear infinite;
-    width: max-content;
-  }
-
-  .partners-track:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-100% / 3));
-    }
-  }
-
-  .partner-item {
-    min-width: 180px;
-  }
-</style>
