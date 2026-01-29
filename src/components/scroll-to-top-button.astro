@@ -1,35 +1,51 @@
 ---
-// Scroll to top button - shows when user scrolls down, click to scroll to top
+// Floating action buttons - Call hotline & Scroll to top
+const hotline = "0965324969";
 ---
 
+<!-- Call Hotline Button -->
+<a
+  href={`tel:${hotline}`}
+  class="call-btn fixed bottom-32 right-4 z-50 w-11 h-11 rounded-full bg-white border-2 border-primary-500 text-primary-500 shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-primary-50 hover:scale-110 cursor-pointer"
+  aria-label="Gọi hotline"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+</a>
+
+<!-- Scroll to Top Button with Progress Ring -->
 <button
   id="scroll-to-top"
-  class="scroll-to-top-btn fixed bottom-24 right-6 z-50 p-3 rounded-full bg-primary-500 text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-600 hover:scale-110 cursor-pointer"
+  class="scroll-to-top-btn fixed bottom-20 right-4 z-50 w-11 h-11 rounded-full bg-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-50 hover:scale-110 cursor-pointer"
   aria-label="Cuộn lên đầu trang"
 >
-  <svg
-    class="scroll-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="m18 15-6-6-6 6"></path>
+  <!-- Progress Ring SVG -->
+  <svg class="progress-ring absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 44 44">
+    <circle class="progress-ring-bg" cx="22" cy="22" r="20" fill="none" stroke="#e5e7eb" stroke-width="2"/>
+    <circle id="progress-circle" class="progress-ring-fill" cx="22" cy="22" r="20" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-dasharray="125.66" stroke-dashoffset="125.66"/>
+  </svg>
+  <!-- Arrow Icon -->
+  <svg class="scroll-icon relative z-10 text-primary-500" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
   </svg>
 </button>
 
 <style>
+  .call-btn,
   .scroll-to-top-btn {
-    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
+  .call-btn:hover,
   .scroll-to-top-btn:hover {
-    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .scroll-to-top-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Click animation */
@@ -42,63 +58,57 @@
   }
 
   @keyframes click-bounce {
-    0% {
-      transform: scale(1);
-    }
-    30% {
-      transform: scale(0.9);
-    }
-    60% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    30% { transform: scale(0.9); }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); }
   }
 
   @keyframes arrow-fly {
-    0% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    50% {
-      transform: translateY(-8px);
-      opacity: 0.5;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(-4px); opacity: 0.7; }
+    100% { transform: translateY(0); opacity: 1; }
   }
 </style>
 
 <script>
   const scrollBtn = document.getElementById("scroll-to-top");
+  const progressCircle = document.getElementById("progress-circle");
+  const circumference = 2 * Math.PI * 20; // r=20
 
-  if (scrollBtn) {
-    // Show/hide button based on scroll position
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) {
+  if (scrollBtn && progressCircle) {
+    // Update progress ring & show/hide button based on scroll
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+
+      // Update progress ring
+      const offset = circumference * (1 - scrollPercent);
+      progressCircle.style.strokeDashoffset = String(offset);
+
+      // Show/hide button
+      if (scrollTop > 300) {
         scrollBtn.classList.remove("opacity-0", "invisible");
         scrollBtn.classList.add("opacity-100", "visible");
       } else {
         scrollBtn.classList.remove("opacity-100", "visible");
         scrollBtn.classList.add("opacity-0", "invisible");
       }
-    });
+    };
 
-    // Scroll to top on click with smooth easing animation
+    window.addEventListener("scroll", updateProgress);
+    updateProgress(); // Initial call
+
+    // Scroll to top on click
     scrollBtn.addEventListener("click", () => {
-      // Add click animation
       scrollBtn.classList.add("clicking");
       setTimeout(() => scrollBtn.classList.remove("clicking"), 400);
 
-      // Custom smooth scroll with easing
       const startPosition = window.scrollY;
-      const duration = 800; // ms
+      const duration = 800;
       let startTime: number | null = null;
 
-      // Easing function - easeInOutCubic for smooth acceleration/deceleration
       const easeInOutCubic = (t: number): number => {
         return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       };
