@@ -1,7 +1,6 @@
 ---
 // Hero search form with tabs and filters
-import PriceRangeDropdown from "@components/ui/price-range-dropdown.astro";
-import AreaRangeDropdown from "@components/ui/area-range-dropdown.astro";
+import RangeSliderDropdown from "@components/ui/range-slider-dropdown.astro";
 import LocationDropdown from "@components/ui/location-dropdown.astro";
 import PropertyTypeDropdown from "@components/ui/property-type-dropdown.astro";
 
@@ -75,10 +74,10 @@ const tabs = [
       <PropertyTypeDropdown />
 
       <!-- Price Range Dropdown -->
-      <PriceRangeDropdown />
+      <RangeSliderDropdown type="price" />
 
       <!-- Area Range Dropdown -->
-      <AreaRangeDropdown />
+      <RangeSliderDropdown type="area" />
     </div>
   </form>
 </div>

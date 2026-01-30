@@ -1,5 +1,15 @@
 ---
-// Location dropdown component with featured cities and provinces grid
+/**
+ * LocationDropdown - City/province selector with featured cities grid
+ *
+ * @example
+ * <LocationDropdown name="location" />
+ * <LocationDropdown placeholder="Chọn tỉnh thành" />
+ *
+ * @prop id - Form input ID (optional, default: 'location')
+ * @prop name - Form input name (optional, default: 'city')
+ * @prop placeholder - Trigger button text (optional, default: 'Toàn quốc')
+ */
 
 // Featured cities with images
 const featuredCities = [
@@ -79,8 +89,11 @@ const allProvinces = [
 ];
 
 interface Props {
+  /** Form input ID */
   id?: string;
+  /** Form input name for submission */
   name?: string;
+  /** Trigger button placeholder text */
   placeholder?: string;
 }
 
