@@ -280,7 +280,22 @@ export const mockNews: NewsArticle[] = [
     slug: "thi-truong-bds-viet-nam-2026-xu-huong-moi",
     excerpt:
       "Khám phá những xu hướng bất động sản nổi bật trong năm 2026 và cơ hội đầu tư tiềm năng...",
-    content: "",
+    content: `<p>Năm 2026 đánh dấu một bước ngoặt quan trọng trong thị trường bất động sản Việt Nam với nhiều xu hướng mới nổi bật. Từ sự phục hồi mạnh mẽ sau giai đoạn điều chỉnh đến những thay đổi trong nhu cầu của người mua, thị trường đang cho thấy những tín hiệu tích cực.</p>
+
+<h2>1. Phân khúc nhà ở bình dân tăng trưởng mạnh</h2>
+<p>Với các chính sách hỗ trợ từ Chính phủ và nhu cầu thực của người dân, phân khúc nhà ở giá rẻ và trung cấp đang trở thành điểm sáng của thị trường. Nhiều chủ đầu tư đã chuyển hướng sang phát triển các dự án phù hợp với túi tiền của đa số người dân.</p>
+
+<h2>2. Xu hướng "xanh hóa" bất động sản</h2>
+<p>Các dự án bất động sản xanh, thân thiện với môi trường ngày càng được ưa chuộng. Người mua nhà hiện đại không chỉ quan tâm đến giá cả và vị trí mà còn chú trọng đến các tiêu chí bền vững như tiết kiệm năng lượng, không gian xanh và vật liệu xây dựng thân thiện.</p>
+
+<h2>3. Công nghệ PropTech bùng nổ</h2>
+<p>Ứng dụng công nghệ trong bất động sản đang thay đổi cách người mua tìm kiếm và giao dịch. Từ tour 3D, thực tế ảo đến các nền tảng môi giới trực tuyến, PropTech đang tạo ra cuộc cách mạng trong ngành.</p>
+
+<h2>4. Khu vực vệ tinh phát triển</h2>
+<p>Với giá đất tại các thành phố lớn ngày càng tăng, nhiều người mua đang chuyển hướng sang các khu vực vệ tinh. Các tỉnh như Bình Dương, Long An, Hưng Yên đang trở thành điểm đến hấp dẫn với hạ tầng giao thông ngày càng hoàn thiện.</p>
+
+<h2>Kết luận</h2>
+<p>Thị trường bất động sản 2026 hứa hẹn nhiều cơ hội cho cả nhà đầu tư và người mua để ở. Việc nắm bắt đúng xu hướng sẽ giúp bạn đưa ra những quyết định đầu tư thông minh.</p>`,
     thumbnail:
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop",
     category: "market",
@@ -294,7 +309,25 @@ export const mockNews: NewsArticle[] = [
     slug: "huong-dan-mua-nha-lan-dau-cho-nguoi-tre",
     excerpt:
       "Những kinh nghiệm và lời khuyên hữu ích cho những ai đang có kế hoạch mua nhà lần đầu...",
-    content: "",
+    content: `<p>Mua nhà lần đầu là một cột mốc quan trọng trong cuộc đời. Tuy nhiên, với giá bất động sản ngày càng tăng, người trẻ cần có sự chuẩn bị kỹ lưỡng cả về tài chính lẫn kiến thức.</p>
+
+<h2>1. Xác định ngân sách và khả năng tài chính</h2>
+<p>Trước khi bắt đầu tìm kiếm, hãy đánh giá chính xác khả năng tài chính của bạn. Quy tắc chung là khoản vay không nên vượt quá 50% thu nhập hàng tháng. Bạn cũng cần dự trù thêm 5-10% giá trị căn nhà cho các chi phí phát sinh.</p>
+
+<h2>2. Lựa chọn vị trí phù hợp</h2>
+<p>Vị trí là yếu tố quan trọng nhất trong bất động sản. Hãy cân nhắc khoảng cách đến nơi làm việc, trường học, bệnh viện và các tiện ích xung quanh. Đừng quên kiểm tra quy hoạch tương lai của khu vực.</p>
+
+<h2>3. Kiểm tra pháp lý cẩn thận</h2>
+<p>Đây là bước không thể bỏ qua. Hãy yêu cầu xem sổ đỏ/sổ hồng gốc, kiểm tra quy hoạch, và tham khảo ý kiến của luật sư hoặc chuyên gia bất động sản trước khi ký hợp đồng.</p>
+
+<h2>4. Đàm phán giá hiệu quả</h2>
+<p>Đừng ngại đàm phán. Nghiên cứu giá thị trường, so sánh với các căn hộ tương tự, và đưa ra mức giá hợp lý. Thời điểm mua nhà cũng ảnh hưởng đến khả năng đàm phán của bạn.</p>
+
+<h2>5. Lựa chọn ngân hàng cho vay</h2>
+<p>So sánh lãi suất và điều kiện vay từ nhiều ngân hàng. Chú ý đến lãi suất ưu đãi trong năm đầu và lãi suất thả nổi sau đó. Một số ngân hàng còn có chương trình hỗ trợ đặc biệt cho người mua nhà lần đầu.</p>
+
+<h2>Lời khuyên cuối cùng</h2>
+<p>Đừng vội vàng và đừng để cảm xúc chi phối quyết định. Mua nhà là khoản đầu tư lớn, hãy dành thời gian nghiên cứu và so sánh trước khi quyết định.</p>`,
     thumbnail:
       "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
     category: "tips",
@@ -308,7 +341,27 @@ export const mockNews: NewsArticle[] = [
     slug: "chinh-sach-ho-tro-nguoi-mua-nha-o-xa-hoi-2026",
     excerpt:
       "Tổng hợp các chính sách mới nhất về hỗ trợ mua nhà ở xã hội dành cho người có thu nhập thấp...",
-    content: "",
+    content: `<p>Năm 2026, Chính phủ tiếp tục triển khai nhiều chính sách hỗ trợ người dân tiếp cận nhà ở xã hội với mức giá phù hợp. Dưới đây là tổng hợp các chính sách quan trọng nhất.</p>
+
+<h2>1. Gói tín dụng 120.000 tỷ đồng</h2>
+<p>Gói tín dụng ưu đãi với lãi suất thấp hơn 1,5-2% so với lãi suất thương mại dành cho người mua nhà ở xã hội. Thời hạn vay tối đa 25 năm với mức vay lên đến 80% giá trị căn hộ.</p>
+
+<h2>2. Điều kiện được hưởng chính sách</h2>
+<p>Để được mua nhà ở xã hội, người mua cần đáp ứng các điều kiện sau:</p>
+<ul>
+<li>Thu nhập dưới 15 triệu đồng/tháng (cá nhân) hoặc 30 triệu đồng/tháng (hộ gia đình)</li>
+<li>Chưa có nhà ở hoặc có nhà ở diện tích dưới 10m²/người</li>
+<li>Có hộ khẩu tại địa phương hoặc đóng BHXH tại địa phương</li>
+</ul>
+
+<h2>3. Quy trình đăng ký</h2>
+<p>Người dân cần nộp hồ sơ tại UBND cấp xã/phường nơi cư trú hoặc nơi làm việc. Hồ sơ bao gồm đơn đăng ký, giấy xác nhận thu nhập, và các giấy tờ chứng minh điều kiện.</p>
+
+<h2>4. Các dự án nhà ở xã hội nổi bật</h2>
+<p>Nhiều dự án nhà ở xã hội đang được triển khai tại các thành phố lớn với giá bán từ 15-20 triệu đồng/m². Các dự án này đều đảm bảo chất lượng xây dựng và tiện ích cơ bản.</p>
+
+<h2>Lưu ý quan trọng</h2>
+<p>Người mua nhà ở xã hội không được chuyển nhượng trong 5 năm đầu. Sau 5 năm, nếu muốn bán phải hoàn trả phần ưu đãi đã được hưởng cho Nhà nước.</p>`,
     thumbnail:
       "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=400&h=300&fit=crop",
     category: "policy",
