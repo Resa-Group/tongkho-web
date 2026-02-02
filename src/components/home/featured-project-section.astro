@@ -1,7 +1,12 @@
 ---
+import type { Project } from '@/types/property';
 import { mockProjects } from '@/data/mock-properties';
 
-const projects = mockProjects;
+interface Props {
+  projects?: Project[];
+}
+
+const { projects = mockProjects } = Astro.props;
 ---
 
 <section class="py-16 lg:py-20 bg-white">
