@@ -10,6 +10,7 @@
  * @prop name - Form input name (optional, default: 'city')
  * @prop placeholder - Trigger button text (optional, default: 'Toàn quốc')
  */
+import Checkbox from "@components/ui/checkbox.astro";
 
 // Featured cities with images
 const featuredCities = [
@@ -132,14 +133,7 @@ const { id = "location", name = "city", placeholder = "Toàn quốc" } = Astro.p
     <div class="flex items-center justify-between mb-4">
       <h4 class="text-xl font-bold text-secondary-800">Top tỉnh thành nổi bật</h4>
       <div class="flex items-center gap-6">
-        <label class="flex items-center gap-2 cursor-pointer text-sm text-secondary-600">
-          <input
-            type="checkbox"
-            class="w-4 h-4 rounded border-secondary-300 text-primary-500 focus:ring-primary-500"
-            data-new-admin
-          />
-          <span>Sử dụng địa chỉ hành chính mới</span>
-        </label>
+        <Checkbox label="Sử dụng địa chỉ hành chính mới" />
         <button
           type="button"
           class="text-sm text-primary-500 hover:text-primary-600 font-medium"
