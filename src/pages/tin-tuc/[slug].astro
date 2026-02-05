@@ -7,17 +7,16 @@
 import MainLayout from '@/layouts/main-layout.astro';
 import ArticleShareButtons from '@/components/news/article-share-buttons.astro';
 import RelatedArticlesSidebar from '@/components/news/news-related-articles-sidebar.astro';
-import { postgresNewsProjectService } from '@/services/postgres-news-project-service';
-import { formatRelativeTime } from '@/utils/format';
-import type { NewsArticle, NewsCategory } from '@/types/property';
+import { getNewsBySlug, getLatestNews } from '@/services/postgres-news-project-service';
+import type { NewsCategory } from '@/types/property';
 
 // Get slug from URL params
 const { slug } = Astro.params;
 
 // Fetch article and related articles from PostgreSQL
 const [article, allNews] = await Promise.all([
-  slug ? postgresNewsProjectService.getNewsBySlug(slug) : null,
-  postgresNewsProjectService.getLatestNews(20),
+  slug ? getNewsBySlug(slug) : null,
+  getLatestNews(20),
 ]);
 
 // Return 404 if article not found

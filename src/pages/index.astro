@@ -9,7 +9,7 @@ import PartnersSection from '@components/home/partners-section.astro';
 import DownloadAppSection from '@components/home/download-app-section.astro';
 import PressCoverageSection from '@components/home/press-coverage-section.astro';
 import { elasticsearchPropertyService } from '@/services/elasticsearch-property-service';
-import { postgresNewsProjectService } from '@/services/postgres-news-project-service';
+import { getFeaturedProjects, getLatestNews } from '@/services/postgres-news-project-service';
 
 // Enable SSR for this page (fetch fresh data on each request)
 export const prerender = false;
@@ -18,8 +18,8 @@ export const prerender = false;
 const [propertiesForSale, propertiesForRent, featuredProjects, latestNews] = await Promise.all([
   elasticsearchPropertyService.searchProperties('sale', 8),
   elasticsearchPropertyService.searchProperties('rent', 8),
-  postgresNewsProjectService.getFeaturedProjects(5),
-  postgresNewsProjectService.getLatestNews(8),
+  getFeaturedProjects(5),
+  getLatestNews(8),
 ]);
 ---
 

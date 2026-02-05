@@ -1,0 +1,38 @@
+import { pgTable, serial, varchar, text, boolean, timestamp, integer, numeric, jsonb } from 'drizzle-orm/pg-core';
+
+export const realEstate = pgTable('real_estate', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 500 }),
+  slug: varchar('slug', { length: 500 }),
+  propertyTypeId: integer('property_type_id'),
+  propertyType: varchar('property_type', { length: 100 }),
+  transactionType: integer('transaction_type'),
+  price: varchar('price', { length: 100 }),
+  priceDescription: varchar('price_description', { length: 200 }),
+  area: numeric('area'),
+  bedrooms: integer('bedrooms'),
+  bathrooms: integer('bathrooms'),
+  city: varchar('city', { length: 100 }),
+  district: varchar('district', { length: 100 }),
+  streetAddress: varchar('street_address', { length: 500 }),
+  description: text('description'),
+  htmlContent: text('html_content'),
+  images: text('images'),
+  mainImage: varchar('main_image', { length: 500 }),
+  isFeatured: boolean('is_featured').default(false),
+  isVerified: boolean('is_verified').default(false),
+  createdOn: timestamp('created_on'),
+  createdTime: timestamp('created_time'),
+  dataJson: jsonb('data_json'),
+  contactName: varchar('contact_name', { length: 200 }),
+  contactPhone: varchar('contact_phone', { length: 50 }),
+  contactEmail: varchar('contact_email', { length: 200 }),
+  furniture: varchar('furniture', { length: 200 }),
+  floors: integer('floors'),
+  houseDirection: varchar('house_direction', { length: 50 }),
+  frontageWidth: numeric('frontage_width'),
+  roadWidth: numeric('road_width'),
+  aactive: boolean('aactive').default(true),
+});
+
+export type RealEstateRow = typeof realEstate.$inferSelect;

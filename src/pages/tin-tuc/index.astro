@@ -5,7 +5,7 @@
  */
 import MainLayout from '@/layouts/main-layout.astro';
 import Pagination from '@/components/ui/pagination.astro';
-import { postgresNewsProjectService } from '@/services/postgres-news-project-service';
+import { getLatestNews } from '@/services/postgres-news-project-service';
 import { formatRelativeTime } from '@/utils/format';
 import type { NewsCategory } from '@/types/property';
 
@@ -31,7 +31,7 @@ const categories: { key: NewsCategory; label: string; slug: string }[] = [
 ];
 
 // Fetch real news from PostgreSQL
-const allNews = await postgresNewsProjectService.getLatestNews(100);
+const allNews = await getLatestNews(100);
 
 // Count per category
 const categoryCounts: Record<NewsCategory, number> = {
