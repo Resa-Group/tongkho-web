@@ -1,12 +1,14 @@
 ---
+import { Image } from 'astro:assets';
+import heroBg from '@/assets/images/hero/hero-bg.webp';
 import HeroSearch from './hero-search.astro';
 ---
 
 <section class="relative min-h-[600px] lg:min-h-[700px] flex items-center">
   <!-- Background Image -->
   <div class="absolute inset-0 pointer-events-none">
-    <img
-      src="/images/hero-bg.webp"
+    <Image
+      src={heroBg}
       alt="Thành phố Việt Nam"
       class="w-full h-full object-cover"
     />

@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import logoLight from '@/assets/images/branding/logo-light.webp';
+
 const currentYear = new Date().getFullYear();
 
 const footerLinks = {
@@ -56,7 +59,7 @@ const socialLinks = [
       <!-- Company Info -->
       <div class="lg:col-span-2">
         <a href="/" class="inline-block mb-4">
-          <img src="/images/logo-light.webp" alt="TongkhoBDS.com" class="h-12 w-auto" />
+          <Image src={logoLight} alt="TongkhoBDS.com" class="h-12 w-auto" />
         </a>
         <p class="text-secondary-400 mb-4 text-sm">
           Tổng kho bất động sản lớn nhất Việt Nam. Hàng ngàn dữ liệu cập nhật liên tục,
@@ -173,7 +176,7 @@ const socialLinks = [
             class="inline-block hover:opacity-80 transition-opacity"
           >
             <img
-              src="/images/da-dang-ky-bct.svg"
+              src="/images/icons/da-dang-ky-bct.svg"
               alt="Đã đăng ký Bộ Công Thương"
               class="h-12 w-auto"
             />

@@ -1,4 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+import modalLogin from '@/assets/images/auth/modal-login.webp';
+import logo from '@/assets/images/branding/logo.webp';
+
 // Auth Modal Component - Signin/Signup with OTP flow
 // Design: Split layout (image left + form right), minimal, professional
 
@@ -28,15 +32,15 @@ const { defaultTab = 'signin' } = Astro.props;
   >
     <!-- Left: Image -->
     <div class="hidden md:block w-1/2 relative">
-      <img
-        src="/images/modal-login.webp"
+      <Image
+        src={modalLogin}
         alt="Đăng ký tài khoản TongkhoBDS"
         class="absolute inset-0 w-full h-full object-cover"
       />
       <!-- Logo overlay -->
       <div class="absolute top-6 left-6">
         <a href="/">
-          <img src="/images/logo.webp" alt="TongkhoBDS" class="h-10" />
+          <Image src={logo} alt="TongkhoBDS" class="h-10" />
         </a>
       </div>
     </div>
@@ -60,7 +64,7 @@ const { defaultTab = 'signin' } = Astro.props;
         <!-- Mobile Logo -->
         <div class="md:hidden mb-6">
           <a href="/">
-            <img src="/images/logo.webp" alt="TongkhoBDS" class="h-9" />
+            <Image src={logo} alt="TongkhoBDS" class="h-9" />
           </a>
         </div>
 

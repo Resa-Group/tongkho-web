@@ -15,6 +15,18 @@ export default defineConfig({
   build: {
     inlineStylesheets: "auto",
   },
+  image: {
+    layout: "constrained",
+    responsiveStyles: true,
+    breakpoints: [320, 640, 1024, 1280],
+    // Prepared for future CDN integration
+    // domains: ['api.tongkhobds.com'],
+    // remotePatterns: [{
+    //   protocol: 'https',
+    //   hostname: '*.tongkhobds.com',
+    //   pathname: '/images/**'
+    // }]
+  },
   vite: {
     plugins: [tailwindcss()],
     ssr: {

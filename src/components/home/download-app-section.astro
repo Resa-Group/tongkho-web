@@ -1,10 +1,20 @@
 ---
+import { Image } from 'astro:assets';
+import qrCustomer from '@/assets/images/download-app/qr-customer.webp';
+import qrAgent from '@/assets/images/download-app/qr-agent.webp';
+import appStore from '@/assets/images/download-app/appstore.png';
+import googlePlay from '@/assets/images/download-app/googleplay.png';
+import phoneBack from '@/assets/images/download-app/phone-back.webp';
+import phoneFront from '@/assets/images/download-app/phone-front.webp';
+import bgCustomer from '@/assets/images/download-app/NEN_DTH_2.webp';
+import bgAgent from '@/assets/images/download-app/NEN_DTH_1.webp';
+
 // Download app section - Customer app (orange) + Agent app (blue)
 const customerApp = {
   title: "Tìm thuê, mua bán đến đầu tư",
   description: "Tất cả bất động sản bạn cần đều có tại",
-  qrCode: "/images/download-app/qr-customer.webp",
-  phoneImage: "/images/download-app/phone-back.webp",
+  qrCode: qrCustomer,
+  phoneImage: phoneBack,
   appStoreUrl:
     "https://apps.apple.com/vn/app/tongkhobds-com-t%E1%BB%95ng-kho-bds/id6747106665",
   playStoreUrl:
@@ -14,8 +24,8 @@ const customerApp = {
 const agentApp = {
   title: "Dành cho môi giới → Trở thành đối tác",
   description: "Đăng tin không giới hạn, nhận quyền lợi độc quyền từ",
-  qrCode: "/images/download-app/qr-agent.webp",
-  phoneImage: "/images/download-app/phone-front.webp",
+  qrCode: qrAgent,
+  phoneImage: phoneFront,
   appStoreUrl:
     "https://apps.apple.com/vn/app/tongkhobds-com-agent/id6747106732",
   playStoreUrl:
@@ -31,9 +41,12 @@ const agentApp = {
         <div
           class="bg-[#f1913d] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-8 lg:pr-70 min-h-100 flex flex-col justify-between relative"
         >
-          <div
-            class="absolute bottom-0 left-0 z-0 w-[300px] h-[400px] bg-[url('images/download-app/NEN_DTH_2.webp')] opacity-65"
-          >
+          <div class="absolute bottom-0 left-0 z-0 w-75 h-100 opacity-65">
+            <Image
+              src={bgCustomer}
+              alt=""
+              class="w-full h-full object-cover"
+            />
           </div>
           <div class="relative z-10">
             <h2 class="text-xl font-bold text-white italic mb-3">
@@ -48,7 +61,7 @@ const agentApp = {
           </div>
           <div class="flex items-end gap-4 mt-20 sm:mt-28 lg:mt-36 relative z-10">
             <div class="bg-white p-2 rounded-lg">
-              <img src={customerApp.qrCode} alt="Mã QR tải ứng dụng khách hàng TongkhoBDS" class="w-20 h-20" />
+              <Image src={customerApp.qrCode} alt="Mã QR tải ứng dụng khách hàng TongkhoBDS" class="w-20 h-20" />
             </div>
             <div class="flex flex-col gap-3">
               <a
@@ -57,8 +70,8 @@ const agentApp = {
                 rel="noopener"
                 class="block bg-white rounded-lg overflow-hidden hover:opacity-90 transition-opacity"
               >
-                <img
-                  src="/images/download-app/appstore.png"
+                <Image
+                  src={appStore}
                   alt="Tải từ App Store"
                   class="h-11 w-auto"
                 />
@@ -69,8 +82,8 @@ const agentApp = {
                 rel="noopener"
                 class="block bg-white rounded-lg overflow-hidden hover:opacity-90 transition-opacity"
               >
-                <img
-                  src="/images/download-app/googleplay.png"
+                <Image
+                  src={googlePlay}
                   alt="Tải từ Google Play"
                   class="h-11 w-auto"
                 />
@@ -83,9 +96,12 @@ const agentApp = {
         <div
           class="bg-[#04509a] rounded-2xl lg:rounded-r-2xl lg:rounded-l-none p-8 lg:pl-55 min-h-85 flex flex-col justify-between relative"
         >
-          <div
-            class="absolute top-0 right-0 z-0 w-[350px] h-85  bg-[url('images/download-app/NEN_DTH_1.webp')] bg-cover bg-no-repeat"
-          >
+          <div class="absolute top-0 right-0 z-0 w-87.5 h-85">
+            <Image
+              src={bgAgent}
+              alt=""
+              class="w-full h-full object-cover"
+            />
           </div>
           <div class="lg:text-right relative z-10">
             <h2 class="text-xl font-bold text-white italic mb-3">
@@ -106,8 +122,8 @@ const agentApp = {
                 rel="noopener"
                 class="block bg-white rounded-lg overflow-hidden hover:opacity-90 transition-opacity"
               >
-                <img
-                  src="/images/download-app/appstore.png"
+                <Image
+                  src={appStore}
                   alt="Tải từ App Store"
                   class="h-11 w-auto"
                 />
@@ -118,15 +134,15 @@ const agentApp = {
                 rel="noopener"
                 class="block bg-white rounded-lg overflow-hidden hover:opacity-90 transition-opacity"
               >
-                <img
-                  src="/images/download-app/googleplay.png"
+                <Image
+                  src={googlePlay}
                   alt="Tải từ Google Play"
                   class="h-11 w-auto"
                 />
               </a>
             </div>
             <div class="bg-white p-2 rounded-lg order-1 lg:order-2">
-              <img src={agentApp.qrCode} alt="Mã QR tải ứng dụng môi giới TongkhoBDS" class="w-20 h-20" />
+              <Image src={agentApp.qrCode} alt="Mã QR tải ứng dụng môi giới TongkhoBDS" class="w-20 h-20" />
             </div>
           </div>
         </div>
@@ -136,12 +152,12 @@ const agentApp = {
       <div
         class="absolute left-1/2 bottom-0 -translate-x-1/2 z-10 hidden lg:flex items-end justify-center pointer-events-none"
       >
-        <img
+        <Image
           src={customerApp.phoneImage}
           alt="Ứng dụng TongkhoBDS dành cho khách hàng"
           class="w-48 object-contain -mr-16 relative z-10 translate-y-7"
         />
-        <img
+        <Image
           src={agentApp.phoneImage}
           alt="Ứng dụng TongkhoBDS dành cho môi giới"
           class="w-48 object-contain relative z-20 -translate-y-7"

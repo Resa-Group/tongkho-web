@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { partners } from '@/data/partners';
 
 // Duplicate partners for seamless infinite scroll
@@ -15,17 +16,17 @@ const duplicatedPartners = [...partners, ...partners, ...partners];
     <!-- Infinite scroll container - responsive gap -->
     <div class="partners-slider overflow-hidden relative">
       <div class="partners-track flex items-center gap-4 sm:gap-8">
-        {duplicatedPartners.map((partner) => (
+        {duplicatedPartners.map((partner, index) => (
           <a
             href={`/chu-dau-tu/${partner.slug}`}
             class="partner-item flex-shrink-0 flex items-center justify-center bg-white rounded-xl p-3 sm:p-4 shadow-xs hover:shadow-md transition-shadow"
             aria-label={`Xem thông tin ${partner.name}`}
           >
-            <img
+            <Image
               src={partner.image}
               alt={`Logo ${partner.name}`}
               class="h-12 sm:h-16 w-auto object-contain"
-              loading="lazy"
+              loading={index < 6 ? 'eager' : 'lazy'}
             />
           </a>
         ))}

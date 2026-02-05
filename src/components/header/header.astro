@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/branding/logo.webp';
 import { mainNavItems } from './header-nav-data';
 import HeaderMobileMenu from './header-mobile-menu';
 ---
@@ -8,7 +10,7 @@ import HeaderMobileMenu from './header-mobile-menu';
     <nav class="flex items-center justify-between h-16 lg:h-20">
       <!-- Logo - min touch target 44px -->
       <a href="/" class="flex items-center min-h-11 min-w-11">
-        <img src="/images/logo.webp" alt="TongkhoBDS.com" class="h-10 lg:h-12 w-auto" />
+        <Image src={logo} alt="TongkhoBDS.com" class="h-10 lg:h-12 w-auto" />
       </a>
 
       <!-- Desktop Navigation -->

@@ -744,9 +744,85 @@ refactor: Extract filtering logic to utils
 
 ---
 
+## Image Guidelines
+
+### Asset Organization
+
+Store images in `src/assets/images/` organized by semantic category:
+
+```
+src/assets/images/
+├── branding/      # Logos, brand assets
+├── hero/          # Hero section backgrounds
+├── partners/      # Partner/developer logos
+├── download-app/  # App download section assets
+├── auth/          # Authentication modal images
+└── placeholders/  # Fallback images
+```
+
+**Exception:** SVGs used as external link badges (e.g., BCT certification) may stay in `public/` for direct URL access.
+
+### Component Selection
+
+| Scenario | Component | Example |
+|----------|-----------|---------|
+| Local image, static | `<Image />` | Logo, hero background |
+| Data-driven images | `<Image />` with `ImageMetadata` | Partner logos |
+| External/CDN URL | `<Image />` with dimensions | Property thumbnails from API |
+| SVG icon | Native `<img>` or `?raw` import | UI icons, badges |
+| CSS background | Native CSS | Decorative patterns |
+
+### Import Patterns
+
+**Static imports (recommended):**
+```astro
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/branding/logo.webp';
+---
+
+<Image src={logo} alt="TongkhoBDS" class="h-10" />
+```
+
+**Data-driven imports:**
+```typescript
+// src/data/partners.ts
+import type { ImageMetadata } from 'astro';
+import vinhomesLogo from '@/assets/images/partners/vinhomes.webp';
+
+export interface Partner {
+  image: ImageMetadata; // Not string
+}
+```
+
+### Remote Images
+
+For external URLs (future CDN integration):
+
+```astro
+<Image
+  src="https://api.tongkhobds.com/images/property.jpg"
+  alt="Property"
+  width={800}
+  height={600}
+/>
+```
+
+**Required:** Configure `image.remotePatterns` in `astro.config.mjs` before using.
+
+### Best Practices
+
+- Always provide descriptive `alt` text in Vietnamese
+- Use `loading="lazy"` for below-fold images
+- Prefer WebP source format (re-optimized by Astro)
+- Use `class` for sizing, let Astro infer dimensions from import
+
+---
+
 ## Document History
 
 | Version | Date | Changes |
 |---|---|---|
 | 1.0 | 2026-01-28 | Initial code standards documentation |
 | 1.1 | 2026-01-30 | Add Component Documentation Standards section with JSDoc templates |
+| 1.2 | 2026-02-05 | Add Image Guidelines section for Astro image optimization |
