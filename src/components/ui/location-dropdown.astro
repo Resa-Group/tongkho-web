@@ -155,7 +155,7 @@ const { id = "location", name = "city", placeholder = "Toàn quốc" } = Astro.p
       {featuredCities.map((city) => (
         <button
           type="button"
-          class="featured-city group text-center"
+          class="featured-city group text-center cursor-pointer"
           data-value={city.value}
           data-label={city.label}
         >
@@ -180,7 +180,7 @@ const { id = "location", name = "city", placeholder = "Toàn quốc" } = Astro.p
       {allProvinces.map((province) => (
         <button
           type="button"
-          class="province-item text-left text-sm text-secondary-700 hover:text-primary-600 py-1 transition-colors"
+          class="province-item text-left text-sm text-secondary-700 hover:text-primary-600 py-1 transition-colors cursor-pointer"
           data-value={province.value}
           data-label={province.label}
         >
