@@ -68,27 +68,17 @@ const { id = "property-type", name = "type", placeholder = "Loại mua bán" } =
           data-value={type.value}
           data-label={type.label}
         >
-          <!-- Custom Checkbox -->
+          <!-- Checkbox using same pattern as Checkbox component -->
           <div class="relative shrink-0">
             <input
               type="checkbox"
               class="peer sr-only"
               value={type.value}
             />
-            <div class="w-5 h-5 rounded-md border-2 border-secondary-300 bg-white transition-all peer-checked:bg-primary-500 peer-checked:border-primary-500 peer-focus:ring-2 peer-focus:ring-primary-200 peer-focus:ring-offset-1 group-hover:border-primary-400">
-              <svg
-                class="w-full h-full text-white opacity-0 peer-checked:opacity-100 transition-opacity p-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                stroke-width="3"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
+            <div class="w-5 h-5 rounded-md border-2 border-secondary-300 bg-white transition-all peer-checked:bg-primary-500 peer-checked:border-primary-500 peer-focus-visible:ring-2 peer-focus-visible:ring-primary-200 peer-focus-visible:ring-offset-1 group-hover:border-primary-400">
             </div>
-            <!-- Checkmark overlay -->
             <svg
-              class="absolute inset-0 w-5 h-5 text-white opacity-0 transition-opacity p-0.5 pointer-events-none check-icon"
+              class="absolute inset-0 w-5 h-5 text-white opacity-0 peer-checked:opacity-100 transition-opacity p-0.5 pointer-events-none"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -149,15 +139,6 @@ const { id = "property-type", name = "type", placeholder = "Loại mua bán" } =
     background-color: rgb(var(--color-secondary-400));
   }
 
-  /* Checkbox checked state styling via sibling */
-  .property-option input:checked + div {
-    background-color: rgb(var(--color-primary-500));
-    border-color: rgb(var(--color-primary-500));
-  }
-
-  .property-option input:checked ~ .check-icon {
-    opacity: 1;
-  }
 </style>
 
 <script>
@@ -228,15 +209,6 @@ const { id = "property-type", name = "type", placeholder = "Loại mua bán" } =
         countBadge.classList.add('hidden');
       }
 
-      // Update option styles
-      options.forEach((option) => {
-        const checkbox = option.querySelector('input[type="checkbox"]') as HTMLInputElement;
-        if (checkbox.checked) {
-          option.classList.add('bg-primary-50');
-        } else {
-          option.classList.remove('bg-primary-50');
-        }
-      });
     }
 
     function openPanel() {
