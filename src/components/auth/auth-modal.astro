@@ -35,12 +35,15 @@ const { defaultTab = 'signin' } = Astro.props;
       <Image
         src={modalLogin}
         alt="Đăng ký tài khoản TongkhoBDS"
+        width={760}
+        height={1317}
+        quality={85}
         class="absolute inset-0 w-full h-full object-cover"
       />
       <!-- Logo overlay -->
       <div class="absolute top-6 left-6">
         <a href="/">
-          <Image src={logo} alt="TongkhoBDS" class="h-10" />
+          <Image src={logo} alt="TongkhoBDS" width={371} height={72} quality={95} class="h-10" />
         </a>
       </div>
     </div>
@@ -64,7 +67,7 @@ const { defaultTab = 'signin' } = Astro.props;
         <!-- Mobile Logo -->
         <div class="md:hidden mb-6">
           <a href="/">
-            <Image src={logo} alt="TongkhoBDS" class="h-9" />
+            <Image src={logo} alt="TongkhoBDS" width={371} height={72} quality={95} class="h-9" />
           </a>
         </div>
 

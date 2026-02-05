@@ -45,6 +45,9 @@ const agentApp = {
             <Image
               src={bgCustomer}
               alt=""
+              width={429}
+              height={696}
+              quality={85}
               class="w-full h-full object-cover"
             />
           </div>
@@ -61,7 +64,7 @@ const agentApp = {
           </div>
           <div class="flex items-end gap-4 mt-20 sm:mt-28 lg:mt-36 relative z-10">
             <div class="bg-white p-2 rounded-lg">
-              <Image src={customerApp.qrCode} alt="Mã QR tải ứng dụng khách hàng TongkhoBDS" class="w-20 h-20" />
+              <Image src={customerApp.qrCode} alt="Mã QR tải ứng dụng khách hàng TongkhoBDS" width={333} height={333} quality={100} class="w-20 h-20" />
             </div>
             <div class="flex flex-col gap-3">
               <a
@@ -73,6 +76,9 @@ const agentApp = {
                 <Image
                   src={appStore}
                   alt="Tải từ App Store"
+                  width={454}
+                  height={140}
+                  quality={95}
                   class="h-11 w-auto"
                 />
               </a>
@@ -85,6 +91,9 @@ const agentApp = {
                 <Image
                   src={googlePlay}
                   alt="Tải từ Google Play"
+                  width={454}
+                  height={141}
+                  quality={95}
                   class="h-11 w-auto"
                 />
               </a>
@@ -100,6 +109,9 @@ const agentApp = {
             <Image
               src={bgAgent}
               alt=""
+              width={526}
+              height={696}
+              quality={85}
               class="w-full h-full object-cover"
             />
           </div>
@@ -125,6 +137,9 @@ const agentApp = {
                 <Image
                   src={appStore}
                   alt="Tải từ App Store"
+                  width={454}
+                  height={140}
+                  quality={95}
                   class="h-11 w-auto"
                 />
               </a>
@@ -137,12 +152,15 @@ const agentApp = {
                 <Image
                   src={googlePlay}
                   alt="Tải từ Google Play"
+                  width={454}
+                  height={141}
+                  quality={95}
                   class="h-11 w-auto"
                 />
               </a>
             </div>
             <div class="bg-white p-2 rounded-lg order-1 lg:order-2">
-              <Image src={agentApp.qrCode} alt="Mã QR tải ứng dụng môi giới TongkhoBDS" class="w-20 h-20" />
+              <Image src={agentApp.qrCode} alt="Mã QR tải ứng dụng môi giới TongkhoBDS" width={333} height={333} quality={100} class="w-20 h-20" />
             </div>
           </div>
         </div>
@@ -155,11 +173,17 @@ const agentApp = {
         <Image
           src={customerApp.phoneImage}
           alt="Ứng dụng TongkhoBDS dành cho khách hàng"
+          width={288}
+          height={613}
+          quality={90}
           class="w-48 object-contain -mr-16 relative z-10 translate-y-7"
         />
         <Image
           src={agentApp.phoneImage}
           alt="Ứng dụng TongkhoBDS dành cho môi giới"
+          width={288}
+          height={613}
+          quality={90}
           class="w-48 object-contain relative z-20 -translate-y-7"
         />
       </div>

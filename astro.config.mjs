@@ -16,9 +16,13 @@ export default defineConfig({
     inlineStylesheets: "auto",
   },
   image: {
-    layout: "constrained",
-    responsiveStyles: true,
-    breakpoints: [320, 640, 1024, 1280],
+    // Use sharp for high-quality image processing
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        limitInputPixels: false,
+      },
+    },
     // Prepared for future CDN integration
     // domains: ['api.tongkhobds.com'],
     // remotePatterns: [{

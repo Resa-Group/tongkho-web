@@ -25,6 +25,9 @@ const duplicatedPartners = [...partners, ...partners, ...partners];
             <Image
               src={partner.image}
               alt={`Logo ${partner.name}`}
+              width={178}
+              height={99}
+              quality={95}
               class="h-12 sm:h-16 w-auto object-contain"
               loading={index < 6 ? 'eager' : 'lazy'}
             />
