@@ -60,15 +60,7 @@ const FALLBACK_MENU: NavItem[] = [
  */
 export async function getMainNavItems(): Promise<NavItem[]> {
   try {
-    console.log('[Menu Data] Fetching menu from database...');
-    const startTime = Date.now();
-
     const menuItems = await buildMainNav();
-
-    const duration = Date.now() - startTime;
-    console.log(
-      `[Menu Data] Menu fetched successfully in ${duration}ms (${menuItems.length} items)`
-    );
 
     return menuItems;
   } catch (error) {

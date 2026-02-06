@@ -41,12 +41,10 @@ function getCached<T>(
 
   // Check if cache is valid
   if (cached && Date.now() - cached.timestamp < cached.ttl) {
-    console.log(`[MenuService] Cache HIT for key: ${key}`);
     return Promise.resolve(cached.data);
   }
 
   // Cache miss or expired - compute new value
-  console.log(`[MenuService] Cache MISS for key: ${key}`);
   return compute().then((data) => {
     cache.set(key, {
       data,
@@ -63,7 +61,6 @@ function getCached<T>(
  */
 export function clearMenuCache(): void {
   cache.clear();
-  console.log("[MenuService] Cache cleared");
 }
 
 /**
@@ -126,10 +123,6 @@ export async function fetchPropertyTypesByTransaction(
               )
             );
 
-    console.log(
-      `[MenuService] Fetched ${result.length} property types for transaction type ${transactionType} (${rootItems.length > 0 ? 'root items only' : 'all items'})`
-    );
-
     return result.map((row) => ({
       id: row.id,
       title: row.title || "",
@@ -174,8 +167,6 @@ export async function fetchSubFolders(parentId: number): Promise<MenuFolder[]> {
       )
       .orderBy(folder.displayOrder);
 
-    console.log(`[MenuService] Fetched ${result.length} sub-folders for parent ${parentId}`);
-
     return result.map((row) => ({
       id: row.id,
       parent: row.parent,
@@ -216,8 +207,6 @@ export async function fetchNewsFolders(): Promise<MenuFolder[]> {
       )
       .orderBy(folder.displayOrder);
 
-    console.log(`[MenuService] Fetched ${parentFolders.length} parent news folders`);
-
     // For each parent folder, fetch sub-folders
     const foldersWithSubs: MenuFolder[] = await Promise.all(
       parentFolders.map(async (parentFolder) => {
@@ -232,10 +221,6 @@ export async function fetchNewsFolders(): Promise<MenuFolder[]> {
           subFolders: subFolders.length > 0 ? subFolders : undefined,
         };
       })
-    );
-
-    console.log(
-      `[MenuService] Fetched ${foldersWithSubs.length} news folders with hierarchy`
     );
 
     return foldersWithSubs;
@@ -262,8 +247,6 @@ export async function buildMenuStructure(
   return getCached(
     "menu_structure",
     async () => {
-      console.log("[MenuService] Building menu structure from database...");
-
       // Fetch all menu data in parallel
       const [saleTypes, rentTypes, projectTypes, newsFolders] =
         await Promise.all([
@@ -283,10 +266,6 @@ export async function buildMenuStructure(
         newsFolders,
         generatedAt: new Date(),
       };
-
-      console.log(
-        `[MenuService] Menu structure built: ${saleTypes.length} sale, ${rentTypes.length} rent, ${projectTypes.length} project, ${newsFolders.length} news folders`
-      );
 
       return structure;
     },
@@ -384,8 +363,6 @@ export async function buildMainNav(): Promise<NavItem[]> {
     { label: "Mạng lưới", href: "/mang-luoi" },
     { label: "Tiện ích", href: "/tien-ich" },
   ];
-
-  console.log(`[MenuService] Main navigation built with ${nav.length} top-level items`);
 
   return nav;
 }
