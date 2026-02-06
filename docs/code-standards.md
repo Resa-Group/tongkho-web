@@ -713,6 +713,115 @@ When tests are introduced:
 
 ---
 
+## Database & Service Layer Standards [Phase 1]
+
+### Service Layer Architecture
+Services encapsulate business logic and database access:
+
+```typescript
+// src/services/menu-service.ts pattern
+export async function buildMenuStructure(): Promise<MenuStructure> {
+  return getCached('menu_structure', async () => {
+    // Fetch from DB
+    // Transform to domain models
+    // Return typed structure
+  }, cacheTTL);
+}
+```
+
+**Rules:**
+- One responsibility per service file
+- Use interfaces for input/output types (MenuStructure, MenuPropertyType)
+- Implement caching for build-time performance
+- Graceful error handling with fallback data
+- Console logging for debugging (cache hits/misses, errors)
+
+### Drizzle ORM Schema Guidelines
+Schemas define database table structure:
+
+```typescript
+// src/db/schema/menu.ts pattern
+export const propertyType = pgTable('property_type', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 512 }),
+  transactionType: integer('transaction_type'),
+  aactive: boolean('aactive').default(true),
+});
+
+export type PropertyTypeRow = typeof propertyType.$inferSelect;
+```
+
+**Rules:**
+- Column names match database (snake_case)
+- Types match PostgreSQL types (varchar, integer, boolean)
+- Export inferred types for TypeScript safety
+- Use `.default()` for common defaults
+- Document V1 table mappings in comments
+
+### Database Client Usage
+```typescript
+// src/db/index.ts pattern
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+
+const connectionString = import.meta.env.DATABASE_URL;
+const client = postgres(connectionString, { max: 10 });
+export const db = drizzle(client, { schema });
+```
+
+**Rules:**
+- Use DATABASE_URL environment variable
+- Connection pooling (max: 10 connections)
+- Export single db instance for import throughout app
+- Handle connection errors gracefully during build
+
+### Database Queries in Services
+```typescript
+// Query pattern with type safety
+const result = await db
+  .select({
+    id: propertyType.id,
+    title: propertyType.title,
+  })
+  .from(propertyType)
+  .where(and(
+    eq(propertyType.aactive, true),
+    eq(propertyType.transactionType, 1)
+  ));
+```
+
+**Rules:**
+- Explicitly select needed columns (no SELECT *)
+- Use `and()`, `eq()`, `isNull()` from drizzle-orm
+- Always filter by `aactive=true` (V1 soft-delete pattern)
+- Use `.orderBy()` for consistent results
+- Wrap in try-catch with error logging
+
+### Caching Strategy (Build-Time)
+```typescript
+const cache = new Map<string, MenuCacheEntry<unknown>>();
+
+function getCached<T>(
+  key: string,
+  compute: () => Promise<T>,
+  ttl: number
+): Promise<T> {
+  const cached = cache.get(key);
+  if (cached && !isExpired(cached)) return cached.data;
+  return compute().then(data => {
+    cache.set(key, { data, timestamp: Date.now(), ttl });
+    return data;
+  });
+}
+```
+
+**Rules:**
+- Cache only at build time (no runtime caching)
+- 1-hour TTL (3600000ms) default for menu data
+- Use string keys that describe the cache entry
+- Log cache hits/misses for debugging
+- Provide manual `clearMenuCache()` function
+
 ## Performance Checklist
 
 - Use `<picture>` elements for responsive images
@@ -721,6 +830,9 @@ When tests are introduced:
 - Preload critical fonts (Inter, Be Vietnam Pro)
 - Never use `<script>` tags (defeats static generation)
 - Use CSS containment for large grids (`contain: layout`)
+- **Database:** Ensure queries have indexes on filtered columns (transaction_type, parent, display_order)
+- **Services:** Implement caching for repeated data fetches during build
+- **Schemas:** Use explicit column selection in queries (no SELECT *)
 
 ---
 
@@ -826,3 +938,4 @@ For external URLs (future CDN integration):
 | 1.0 | 2026-01-28 | Initial code standards documentation |
 | 1.1 | 2026-01-30 | Add Component Documentation Standards section with JSDoc templates |
 | 1.2 | 2026-02-05 | Add Image Guidelines section for Astro image optimization |
+| 1.3 | 2026-02-06 | Phase 1: Add Database & Service Layer standards (Drizzle ORM, menu service, caching, V1 soft-delete pattern) |

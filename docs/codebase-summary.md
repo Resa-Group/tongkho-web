@@ -24,6 +24,20 @@ tongkho-web/
 │   │       └── news-section.astro           # News articles (101 LOC)
 │   ├── data/
 │   │   └── mock-properties.ts               # Property/project/news mock data (255 LOC)
+│   ├── db/
+│   │   ├── index.ts                         # Drizzle ORM database client
+│   │   ├── schema/
+│   │   │   ├── index.ts                     # Schema exports
+│   │   │   ├── menu.ts                      # Menu schema (propertyType, folder)
+│   │   │   ├── real-estate.ts               # Real estate property schema
+│   │   │   ├── project.ts                   # Project schema
+│   │   │   └── news.ts                      # News schema
+│   │   └── migrations/
+│   │       ├── 0000_peaceful_payback.sql    # Base schema migration
+│   │       ├── 0001_add_menu_indexes.sql    # Menu performance indexes
+│   │       └── README-MENU-INDEXES.md       # Migration documentation
+│   ├── services/
+│   │   └── menu-service.ts                  # Menu generation service (320 LOC)
 │   ├── layouts/
 │   │   ├── base-layout.astro                # HTML base template (65 LOC)
 │   │   └── main-layout.astro                # Header + main + footer (35 LOC)
@@ -32,7 +46,8 @@ tongkho-web/
 │   ├── styles/
 │   │   └── global.css                       # Tailwind + custom styles (118 LOC)
 │   ├── types/
-│   │   └── property.ts                      # TypeScript interfaces (101 LOC)
+│   │   ├── property.ts                      # Property/Project/News interfaces (101 LOC)
+│   │   └── menu.ts                          # Menu service types (72 LOC)
 │   └── utils/
 │       └── format.ts                        # Formatting utilities (94 LOC)
 ├── public/
@@ -47,7 +62,7 @@ tongkho-web/
 └── README.md                                # Project documentation
 ```
 
-**Total:** ~2,000 lines of code
+**Total:** ~2,500 lines of code (including new database layer)
 
 ---
 
@@ -190,6 +205,32 @@ interface SearchFilters {
 
 ## Key Modules
 
+### Menu Service (menu-service.ts) [NEW - Phase 1]
+**Purpose:** Database-driven navigation menu generation for SSG builds
+
+**Key Functions:**
+- `buildMenuStructure()` – Fetch all menu data (property types, news folders) with 1-hour caching
+- `buildMainNav()` – Generate NavItem[] structure for header components
+- `fetchPropertyTypesByTransaction()` – Query property types by transaction (buy/rent/project)
+- `fetchNewsFolders()` – Query news folders with parent-child hierarchy
+- `clearMenuCache()` – Manual cache invalidation
+- `getFallbackMenu()` – Fallback menu if database unavailable
+
+**Features:**
+- In-memory caching during build (configurable 1-hour TTL default)
+- Type-safe transformations to NavItem interface
+- Graceful error handling with fallback menus
+- Parallel data fetching via Promise.all()
+
+**Usage:** Called during Astro build to generate dynamic navigation menus
+
+### Menu Schema (menu.ts) [NEW - Phase 1]
+**Tables:**
+- `propertyType` – Maps V1 property_type table (id, title, parentId, transactionType, vietnamese, slug, aactive)
+- `folder` – Maps V1 folder table (id, parent, name, label, publish, displayOrder)
+
+**Indexes:** Added in migration 0001_add_menu_indexes.sql for performance
+
 ### Navigation Data (header-nav-data.ts)
 **Purpose:** Centralized navigation structure & filter options
 
@@ -201,6 +242,7 @@ interface SearchFilters {
 - `areaRanges[]` – Area bracket options
 
 **Usage:** Imported by header, hero-search, filter components
+**Note:** Will eventually be replaced by database-driven menu from menu-service.ts
 
 ### Mock Data (mock-properties.ts)
 **Purpose:** Sample data for development & demo
@@ -332,3 +374,4 @@ npm run astro    # Astro CLI commands
 | Version | Date | Changes |
 |---|---|---|
 | 1.0 | 2026-01-28 | Initial codebase documentation |
+| 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration, menu type definitions |

@@ -47,8 +47,14 @@
 - **Autoprefixer:** Vendor prefix handling
 - **Custom CSS:** Scoped styles in Astro components
 
+### Database Layer [NEW - Phase 1]
+- **Drizzle ORM:** TypeScript-first ORM for PostgreSQL
+- **PostgreSQL:** Backend database (V1 legacy schema)
+- **Database Client:** postgres-js library for connection pooling
+
 ### Content & Assets
-- **Mock Data:** TypeScript arrays in `src/data/`
+- **Mock Data:** TypeScript arrays in `src/data/` (fallback)
+- **Database-Driven:** Menu structures from PostgreSQL (property types, news folders)
 - **Icons:** Lucide via Iconify JSON
 - **Images:** Static assets in `public/`
 - **Fonts:** Inter (body), Be Vietnam Pro (headings)
@@ -86,6 +92,20 @@ src/
 │       └── news-section.astro
 ├── data/
 │   └── mock-properties.ts  # All mock data (properties, projects, news)
+├── db/                     # [NEW] Database layer
+│   ├── index.ts            # Drizzle ORM client initialization
+│   ├── schema/             # Database schema definitions
+│   │   ├── index.ts        # Schema exports
+│   │   ├── menu.ts         # propertyType, folder tables
+│   │   ├── real-estate.ts  # Property/listing schema
+│   │   ├── project.ts      # Project schema
+│   │   └── news.ts         # News schema
+│   └── migrations/         # Database migrations
+│       ├── 0000_*.sql      # Base schema
+│       ├── 0001_*.sql      # Menu indexes
+│       └── README-*.md     # Migration docs
+├── services/               # [NEW] Business logic services
+│   └── menu-service.ts     # Menu generation (property types, news folders)
 ├── layouts/
 │   ├── base-layout.astro   # HTML <head>, meta tags, fonts
 │   └── main-layout.astro   # Header + <main> + footer wrapper
@@ -94,7 +114,8 @@ src/
 ├── styles/
 │   └── global.css          # Global Tailwind + custom styles
 ├── types/
-│   └── property.ts         # TypeScript interfaces
+│   ├── property.ts         # Property/Project/News interfaces
+│   └── menu.ts             # Menu service types
 └── utils/
     └── format.ts           # Formatting utilities (price, date, slug)
 
@@ -136,6 +157,8 @@ pages/index.astro (Homepage)
 ├── layouts/main-layout.astro
 │   ├── components/header/header.astro
 │   │   └── header-nav-data.ts (NavItems)
+│   │       [Future: buildMainNav() from menu-service]
+│   │
 │   ├── components/header/header-mobile-menu.tsx (React)
 │   │
 │   ├── components/home/hero-section.astro
@@ -159,6 +182,21 @@ pages/index.astro (Homepage)
 │   │
 │   └── components/footer/footer.astro
 │       └── header-nav-data.ts (NavItems)
+│           [Future: buildMainNav() from menu-service]
+```
+
+[NEW - Phase 1] **Database-Driven Menu Flow:**
+```
+astro.config.mjs (build time)
+  ├─ buildMainNav() from menu-service.ts
+  │   ├─ buildMenuStructure()
+  │   │   ├─ fetchPropertyTypesByTransaction(1,2,3)
+  │   │   │   └─ Query: propertyType table
+  │   │   ├─ fetchNewsFolders()
+  │   │   │   └─ Query: folder table
+  │   │   └─ In-memory cache (1-hour TTL)
+  │   └─ Transform to NavItem[] + children
+  └─ Inject into header component
 ```
 
 ### 3. Data Source: Mock Data
@@ -700,6 +738,44 @@ const visibleProperties = properties.filter(p =>
 
 ---
 
+## Phase 1: Database Schema & Service Layer [NEW]
+
+### Menu Service Architecture
+```
+Frontend (Header/Nav Components)
+    ↓
+Astro Build Time
+    ↓
+menu-service.ts
+├─ buildMenuStructure()      # Main entry point with caching
+│   ├─ Cache check (1-hour TTL)
+│   └─ Parallel data fetching
+├─ fetchPropertyTypesByTransaction(txnType)  # Query by transaction (1=sale, 2=rent, 3=project)
+├─ fetchNewsFolders()        # Query news hierarchy
+└─ buildMainNav()            # Generate NavItem[] for header
+    └─ Transform to href + children structure
+    ↓
+Static HTML Generation (Astro output)
+    ↓
+Browser (No runtime database calls)
+```
+
+### Database Schema Files
+- **src/db/schema/menu.ts:** propertyType, folder table schemas
+- **src/db/migrations/0001_add_menu_indexes.sql:** Performance indexes on transaction_type, parent, display_order
+
+### Service Implementation Details
+- **Cache Layer:** In-memory Map with configurable TTL (default 1 hour)
+- **Error Handling:** Graceful fallback to static menu if DB unavailable
+- **Type Safety:** MenuPropertyType, MenuFolder, MenuStructure interfaces
+- **Logging:** Debug logs for cache hits/misses, data fetching
+
+### Performance Optimization
+- In-memory caching eliminates repeated DB queries during build
+- Parallel Promise.all() for property types + news folders
+- Indexes on propertyType.transaction_type, folder.parent, folder.display_order
+- No runtime database calls (data resolved at build time)
+
 ## Referenced Documentation
 
 See detailed V1 schema documentation for deeper analysis:
@@ -713,5 +789,6 @@ See detailed V1 schema documentation for deeper analysis:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.1 | 2026-02-06 | Phase 1: Added menu service architecture, database schema layer, Drizzle ORM integration, caching strategy |
 | 2.0 | 2026-02-06 | Added V1 legacy architecture reference, V1→V2 comparison, data pattern reusability |
 | 1.0 | 2026-01-28 | Initial system architecture documentation |

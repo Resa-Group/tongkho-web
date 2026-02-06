@@ -8,6 +8,27 @@
 
 ---
 
+## Active Features in Development
+
+### SSG Menu with Database Integration (IN PROGRESS)
+**Branch:** buildmenu62
+**Plan:** plans/260206-1440-ssg-menu-database-integration/
+**Current Phase:** 1 of 6 Complete
+
+| Phase | Status | Details |
+|---|---|---|
+| Phase 1: Database Schema & Service | ✅ Complete | Menu service, caching, tests ✓ |
+| Phase 2: Menu Generation at Build Time | 🔄 In Progress | Astro integration, data fetching |
+| Phase 3: Component Integration | 🔵 Planned | Header updates, navigation |
+| Phase 4: News Folder Hierarchy | 🔵 Planned | Recursive folder structure |
+| Phase 5: Testing & Optimization | 🔵 Planned | Performance benchmarks |
+| Phase 6: Documentation & Cleanup | 🔵 Planned | Docs update, old code removal |
+
+**Target Completion:** 2-3 weeks
+**Business Impact:** Dynamic menu eliminates hardcoded data, enables real-time menu updates via database
+
+---
+
 ## Phase Breakdown
 
 ### Phase 1: Foundation & MVP (100% COMPLETE)
@@ -317,4 +338,5 @@ Before moving to Phase 2:
 
 | Version | Date | Author | Changes |
 |---|---|---|---|
+| 1.1 | 2026-02-06 | Project Manager | SSG menu integration phase added; Phase 1 complete |
 | 1.0 | 2026-01-28 | Documentation Manager | Initial roadmap with Phase 1 complete |
