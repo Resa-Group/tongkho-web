@@ -886,6 +886,43 @@ function getCached<T>(
 - Log cache hits/misses for debugging
 - Provide manual `clearMenuCache()` function
 
+### Recursive Data Structures [Phase 4]
+For hierarchical data (e.g., nested news folders), use recursive type definitions:
+
+```typescript
+// MenuFolder with optional nested children
+interface MenuFolder {
+  id: number;
+  parent: number | null;
+  name: string | null;
+  label: string | null;
+  publish: string; // 'T' = published
+  displayOrder: number | null;
+  subFolders?: MenuFolder[];  // Recursive property for children
+}
+
+// Transformation function that recursively maps hierarchy
+function folderToNavItem(folder: MenuFolder): NavItem {
+  const navItem: NavItem = {
+    label: folder.label || folder.name || "",
+    href: `/tin-tuc/danh-muc/${folder.name}`,
+  };
+
+  // Recursively transform sub-folders
+  if (folder.subFolders && folder.subFolders.length > 0) {
+    navItem.children = folder.subFolders.map(folderToNavItem);
+  }
+
+  return navItem;
+}
+```
+
+**Rules:**
+- Use optional `?` for recursive properties to indicate tree leaves
+- Provide separate fetch functions for parent and child data if needed
+- Transform hierarchies recursively to match expected output format
+- Set limits on depth if necessary (e.g., max 5 levels)
+
 ## Performance Checklist
 
 - Use `<picture>` elements for responsive images
@@ -1005,3 +1042,4 @@ For external URLs (future CDN integration):
 | 1.3 | 2026-02-06 | Phase 1: Add Database & Service Layer standards (Drizzle ORM, menu service, caching, V1 soft-delete pattern) |
 | 1.4 | 2026-02-06 | Phase 2: Add Environment Variable handling, connection timeouts, build-time data loading security |
 | 1.5 | 2026-02-06 | Phase 3: Add static-data.ts pattern for UI filter options; document separation of concerns (mock-data vs menu-data vs static-data) |
+| 1.6 | 2026-02-06 | Phase 4: Add Recursive Data Structures guidelines for hierarchical data patterns; document folderToNavItem() recursive transformation pattern |

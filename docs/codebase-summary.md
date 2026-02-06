@@ -38,12 +38,13 @@ tongkho-web/
 │   │       ├── 0001_add_menu_indexes.sql    # Menu performance indexes
 │   │       └── README-MENU-INDEXES.md       # Migration documentation
 │   ├── services/
-│   │   └── menu-service.ts                  # Menu generation service (320 LOC)
+│   │   └── menu-service.ts                  # Menu generation service (384 LOC) [Phase 4]
 │   ├── layouts/
 │   │   ├── base-layout.astro                # HTML base template (65 LOC)
 │   │   └── main-layout.astro                # Header + main + footer (35 LOC)
 │   ├── pages/
-│   │   └── index.astro                      # Homepage (32 LOC)
+│   │   ├── index.astro                      # Homepage (32 LOC)
+│   │   └── tin-tuc/danh-muc/[folder].astro  # Dynamic folder pages (14 LOC) [Phase 4]
 │   ├── styles/
 │   │   └── global.css                       # Tailwind + custom styles (118 LOC)
 │   ├── types/
@@ -206,19 +207,23 @@ interface SearchFilters {
 
 ## Key Modules
 
-### Menu Service (menu-service.ts) [NEW - Phase 1]
-**Purpose:** Database-driven navigation menu generation for SSG builds
+### Menu Service (menu-service.ts) [Phase 4]
+**Purpose:** Database-driven navigation menu generation for SSG builds with hierarchical folder support
 
 **Key Functions:**
 - `buildMenuStructure()` – Fetch all menu data (property types, news folders) with 1-hour caching
-- `buildMainNav()` – Generate NavItem[] structure for header components
+- `buildMainNav()` – Generate NavItem[] structure for header components with nested children
 - `fetchPropertyTypesByTransaction()` – Query property types by transaction (buy/rent/project)
 - `fetchNewsFolders()` – Query news folders with parent-child hierarchy
+- `fetchSubFolders()` – Recursively fetch sub-folders for hierarchical menu items
+- `folderToNavItem()` – Recursively transform MenuFolder to NavItem with nested children
 - `clearMenuCache()` – Manual cache invalidation
 - `getFallbackMenu()` – Fallback menu if database unavailable
 
 **Features:**
 - In-memory caching during build (configurable 1-hour TTL default)
+- Hierarchical folder support (parent-child relationships with unlimited depth)
+- Recursive sub-folder fetching for nested navigation menus
 - Type-safe transformations to NavItem interface
 - Graceful error handling with fallback menus
 - Parallel data fetching via Promise.all()
@@ -403,3 +408,4 @@ npm run astro    # Astro CLI commands
 | 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration, menu type definitions |
 | 1.2 | 2026-02-06 | Phase 2 complete: Added menu-data.ts module for build-time menu generation with fallback support |
 | 1.3 | 2026-02-06 | Phase 3 complete: Extracted static-data.ts for filter options; NavItem interface moved to menu.ts; header components updated to use database-driven menu |
+| 1.4 | 2026-02-06 | Phase 4 complete: Hierarchical news folder support; Added MenuFolder.subFolders field for nested categories; fetchSubFolders() for recursive queries; Dynamic folder pages at /tin-tuc/danh-muc/[folder]; 27 static pages generated at build time |

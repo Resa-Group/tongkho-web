@@ -118,13 +118,56 @@ export async function fetchPropertyTypesByTransaction(
 }
 
 /**
+ * Fetch sub-folders for a parent folder
+ *
+ * @param parentId - Parent folder ID
+ * @returns Array of published sub-folders sorted by display_order
+ */
+export async function fetchSubFolders(parentId: number): Promise<MenuFolder[]> {
+  try {
+    const result = await db
+      .select({
+        id: folder.id,
+        parent: folder.parent,
+        name: folder.name,
+        label: folder.label,
+        publish: folder.publish,
+        displayOrder: folder.displayOrder,
+      })
+      .from(folder)
+      .where(
+        and(
+          eq(folder.publish, "T"), // Published folders only
+          eq(folder.parent, parentId) // Sub-folders of this parent
+        )
+      )
+      .orderBy(folder.displayOrder);
+
+    console.log(`[MenuService] Fetched ${result.length} sub-folders for parent ${parentId}`);
+
+    return result.map((row) => ({
+      id: row.id,
+      parent: row.parent,
+      name: row.name,
+      label: row.label,
+      publish: row.publish,
+      displayOrder: row.displayOrder,
+    }));
+  } catch (error) {
+    console.error(`[MenuService] Error fetching sub-folders for parent ${parentId}:`, error);
+    return []; // Graceful fallback
+  }
+}
+
+/**
  * Fetch all published news folders with hierarchy
  *
- * @returns Array of published news folders sorted by display_order
+ * @returns Array of published news folders with sub-folders, sorted by display_order
  */
 export async function fetchNewsFolders(): Promise<MenuFolder[]> {
   try {
-    const result = await db
+    // Fetch parent folders (direct children of news root)
+    const parentFolders = await db
       .select({
         id: folder.id,
         parent: folder.parent,
@@ -142,16 +185,29 @@ export async function fetchNewsFolders(): Promise<MenuFolder[]> {
       )
       .orderBy(folder.displayOrder);
 
-    console.log(`[MenuService] Fetched ${result.length} news folders`);
+    console.log(`[MenuService] Fetched ${parentFolders.length} parent news folders`);
 
-    return result.map((row) => ({
-      id: row.id,
-      parent: row.parent,
-      name: row.name,
-      label: row.label,
-      publish: row.publish,
-      displayOrder: row.displayOrder,
-    }));
+    // For each parent folder, fetch sub-folders
+    const foldersWithSubs: MenuFolder[] = await Promise.all(
+      parentFolders.map(async (parentFolder) => {
+        const subFolders = await fetchSubFolders(parentFolder.id);
+        return {
+          id: parentFolder.id,
+          parent: parentFolder.parent,
+          name: parentFolder.name,
+          label: parentFolder.label,
+          publish: parentFolder.publish,
+          displayOrder: parentFolder.displayOrder,
+          subFolders: subFolders.length > 0 ? subFolders : undefined,
+        };
+      })
+    );
+
+    console.log(
+      `[MenuService] Fetched ${foldersWithSubs.length} news folders with hierarchy`
+    );
+
+    return foldersWithSubs;
   } catch (error) {
     console.error("[MenuService] Error fetching news folders:", error);
     return []; // Graceful fallback
@@ -222,17 +278,25 @@ function propertyTypeToNavItem(pt: MenuPropertyType, basePath: string): NavItem 
 }
 
 /**
- * Transform news folder to NavItem
+ * Transform news folder to NavItem with nested children
  */
 function folderToNavItem(folder: MenuFolder): NavItem {
   // Use folder name for URL slug
   const slug = folder.name || folder.label?.toLowerCase().replace(/\s+/g, "-") || "";
-  const href = `/tin-tuc/${slug}`;
+  // Use /tin-tuc/danh-muc/ prefix to avoid conflicts with article URLs
+  const href = `/tin-tuc/danh-muc/${slug}`;
 
-  return {
+  const navItem: NavItem = {
     label: folder.label || folder.name || "",
     href,
   };
+
+  // Recursively transform sub-folders if they exist
+  if (folder.subFolders && folder.subFolders.length > 0) {
+    navItem.children = folder.subFolders.map(folderToNavItem);
+  }
+
+  return navItem;
 }
 
 /**

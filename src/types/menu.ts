@@ -39,6 +39,7 @@ export interface MenuFolder {
   label: string | null;
   publish: string | null; // 'T' = published
   displayOrder: number | null;
+  subFolders?: MenuFolder[]; // Hierarchical sub-folders
 }
 
 /**
