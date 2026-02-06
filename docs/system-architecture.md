@@ -156,8 +156,10 @@ Static HTML + CSS
 pages/index.astro (Homepage)
 ├── layouts/main-layout.astro
 │   ├── components/header/header.astro
-│   │   └── header-nav-data.ts (NavItems)
-│   │       [Future: buildMainNav() from menu-service]
+│   │   └── menu-data.ts (Build-time: getMainNavItems) [Phase 2]
+│   │       └── menu-service.ts (buildMainNav)
+│   │           ├── propertyType queries
+│   │           └── folder queries
 │   │
 │   ├── components/header/header-mobile-menu.tsx (React)
 │   │
@@ -181,22 +183,26 @@ pages/index.astro (Homepage)
 │   │   └── mock-properties.ts (mockNews)
 │   │
 │   └── components/footer/footer.astro
-│       └── header-nav-data.ts (NavItems)
-│           [Future: buildMainNav() from menu-service]
+│       └── menu-data.ts (Build-time: getMainNavItems) [Phase 2]
+│           └── menu-service.ts (buildMainNav)
 ```
 
-[NEW - Phase 1] **Database-Driven Menu Flow:**
+**Database-Driven Menu Generation (Phase 2):**
 ```
-astro.config.mjs (build time)
-  ├─ buildMainNav() from menu-service.ts
-  │   ├─ buildMenuStructure()
-  │   │   ├─ fetchPropertyTypesByTransaction(1,2,3)
-  │   │   │   └─ Query: propertyType table
-  │   │   ├─ fetchNewsFolders()
-  │   │   │   └─ Query: folder table
-  │   │   └─ In-memory cache (1-hour TTL)
-  │   └─ Transform to NavItem[] + children
-  └─ Inject into header component
+Astro Build Process
+  ├─ menu-data.ts (getMainNavItems)
+  │   ├─ Calls buildMainNav() from menu-service.ts
+  │   │   ├─ Check in-memory cache (1-hour TTL)
+  │   │   ├─ If missing: buildMenuStructure()
+  │   │   │   ├─ fetchPropertyTypesByTransaction(1,2,3)
+  │   │   │   │   └─ Query: propertyType table (filtered by transaction_type)
+  │   │   │   ├─ fetchNewsFolders()
+  │   │   │   │   └─ Query: folder table (parent-child hierarchy)
+  │   │   │   └─ Cache result (1 hour)
+  │   │   └─ Transform to NavItem[] + children
+  │   └─ Error handling: Return FALLBACK_MENU if database unavailable
+  ├─ Build completes with static HTML
+  └─ No runtime database calls (data baked into HTML)
 ```
 
 ### 3. Data Source: Mock Data
@@ -379,16 +385,23 @@ npm run dev
 ### Production Build
 ```
 npm run build
+  ├─ Environment: Load DATABASE_URL from .env (Phase 2)
   ├─ Step 1: astro check
   │   └─ TypeScript validation (strict mode)
   ├─ Step 2: astro build
+  │   ├─ Menu Generation (Phase 2)
+  │   │   ├─ menu-data.ts: getMainNavItems() executes
+  │   │   │   ├─ Fetch from database via menu-service.ts
+  │   │   │   ├─ Fallback to FALLBACK_MENU if unavailable
+  │   │   │   └─ Embed result in static HTML
+  │   │   └─ Logs: menu item count, fetch duration, errors
   │   ├─ Scan src/pages → generate routes
   │   ├─ Render Astro components to HTML
   │   ├─ Prerender React components
   │   ├─ Process Tailwind CSS
   │   └─ Bundle assets
   └─ Output: dist/ directory
-     ├─ index.html (homepage)
+     ├─ index.html (homepage with embedded menu)
      ├─ sitemap.xml
      ├─ _astro/ (CSS, JS chunks)
      └─ images/
@@ -789,6 +802,7 @@ See detailed V1 schema documentation for deeper analysis:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.2 | 2026-02-06 | Phase 2 complete: Added build-time menu generation flow, menu-data module, environment variable loading, fallback strategy |
 | 2.1 | 2026-02-06 | Phase 1: Added menu service architecture, database schema layer, Drizzle ORM integration, caching strategy |
 | 2.0 | 2026-02-06 | Added V1 legacy architecture reference, V1→V2 comparison, data pattern reusability |
 | 1.0 | 2026-01-28 | Initial system architecture documentation |

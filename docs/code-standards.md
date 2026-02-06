@@ -764,16 +764,50 @@ export type PropertyTypeRow = typeof propertyType.$inferSelect;
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-const connectionString = import.meta.env.DATABASE_URL;
-const client = postgres(connectionString, { max: 10 });
+const connectionString = import.meta.env.DATABASE_URL || process.env.DATABASE_URL;
+const client = postgres(connectionString, {
+  max: 10,
+  connect_timeout: 10,  // 10 seconds connection timeout
+  idle_timeout: 30,     // 30 seconds idle timeout
+});
 export const db = drizzle(client, { schema });
 ```
 
 **Rules:**
-- Use DATABASE_URL environment variable
+- Use DATABASE_URL environment variable (via `import.meta.env` or `process.env`)
 - Connection pooling (max: 10 connections)
+- Set reasonable timeouts (10s connect, 30s idle)
 - Export single db instance for import throughout app
 - Handle connection errors gracefully during build
+
+### Environment Variables [Phase 2]
+Environment variables must be loaded at build time for data generation:
+
+```typescript
+// astro.config.mjs pattern
+import { loadEnv } from 'vite';
+
+const env = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
+```
+
+**Rules:**
+- Load DATABASE_URL before building menu data
+- Never expose to client bundle (security risk)
+- Fallback gracefully if variable missing
+- Log missing variables for troubleshooting
+- Do NOT commit `.env` files; use `.env.example`
+
+**Typical .env contents:**
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/tongkho
+NODE_ENV=development
+```
+
+**Security:**
+- DATABASE_URL contains credentials → keep it secret
+- Use `import.meta.env` safely (NOT exposed to client)
+- Never log full connection strings
+- Use connection pooling to limit active connections
 
 ### Database Queries in Services
 ```typescript
@@ -939,3 +973,4 @@ For external URLs (future CDN integration):
 | 1.1 | 2026-01-30 | Add Component Documentation Standards section with JSDoc templates |
 | 1.2 | 2026-02-05 | Add Image Guidelines section for Astro image optimization |
 | 1.3 | 2026-02-06 | Phase 1: Add Database & Service Layer standards (Drizzle ORM, menu service, caching, V1 soft-delete pattern) |
+| 1.4 | 2026-02-06 | Phase 2: Add Environment Variable handling, connection timeouts, build-time data loading security |

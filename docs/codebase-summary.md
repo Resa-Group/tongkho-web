@@ -23,7 +23,8 @@ tongkho-web/
 │   │       ├── customers-section.astro      # Testimonials (65 LOC)
 │   │       └── news-section.astro           # News articles (101 LOC)
 │   ├── data/
-│   │   └── mock-properties.ts               # Property/project/news mock data (255 LOC)
+│   │   ├── mock-properties.ts               # Property/project/news mock data (255 LOC)
+│   │   └── menu-data.ts                     # Menu data at build time (78 LOC) [Phase 2]
 │   ├── db/
 │   │   ├── index.ts                         # Drizzle ORM database client
 │   │   ├── schema/
@@ -231,18 +232,36 @@ interface SearchFilters {
 
 **Indexes:** Added in migration 0001_add_menu_indexes.sql for performance
 
+### Menu Data (menu-data.ts) [NEW - Phase 2]
+**Purpose:** Fetch menu data from database at build time for Astro SSG
+
+**Key Functions:**
+- `getMainNavItems()` – Async function that fetches menu items during Astro build
+  - Returns database-driven menu via `buildMainNav()` from menu-service.ts
+  - Falls back to `FALLBACK_MENU` if database unavailable
+  - Logs fetch duration and item count for debugging
+  - Sanitizes errors to avoid exposing database credentials
+
+**Features:**
+- Graceful error handling with built-in fallback menu
+- Build-time only execution (no runtime database calls)
+- Console logging for build troubleshooting
+- Safe error messages (no stack trace leaks)
+
+**Usage:** Imported by header, footer components during build process
+
 ### Navigation Data (header-nav-data.ts)
 **Purpose:** Centralized navigation structure & filter options
 
 **Exports:**
-- `mainNavItems[]` – Menu structure (trang chủ, mua bán, cho thuê, dự án, etc.)
+- `mainNavItems[]` – Static menu structure (trang chủ, mua bán, cho thuê, dự án, etc.)
 - `cities[]` – Available cities for filtering
 - `propertyTypes[]` – Property type options
 - `priceRanges[]` – Price bracket options
 - `areaRanges[]` – Area bracket options
 
 **Usage:** Imported by header, hero-search, filter components
-**Note:** Will eventually be replaced by database-driven menu from menu-service.ts
+**Note:** menu-data.ts now provides database-driven menus; header-nav-data.ts provides static fallback data
 
 ### Mock Data (mock-properties.ts)
 **Purpose:** Sample data for development & demo
@@ -375,3 +394,4 @@ npm run astro    # Astro CLI commands
 |---|---|---|
 | 1.0 | 2026-01-28 | Initial codebase documentation |
 | 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration, menu type definitions |
+| 1.2 | 2026-02-06 | Phase 2 complete: Added menu-data.ts module for build-time menu generation with fallback support |
