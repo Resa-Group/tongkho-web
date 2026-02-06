@@ -33,6 +33,5 @@ npm-debug.log*
 .netlify/
 nul
 
-# forder_old
-resaland_v1
-tongkho_v1
+# Legacy reference codebases (read-only)
+reference/
