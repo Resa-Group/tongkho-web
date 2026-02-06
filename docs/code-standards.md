@@ -474,6 +474,36 @@ Not:
 
 ## Data Structure Patterns
 
+### Data Organization in src/data/ [Phase 3]
+
+**Separation of concerns:**
+- `mock-properties.ts` – Dynamic property/project/news data (for rendering sections)
+- `menu-data.ts` – Build-time database menu generation (nav items)
+- `static-data.ts` – Static UI filter options (cities, property types, prices, areas)
+
+**Static Data Organization (static-data.ts)**
+Store immutable UI dropdown options in `src/data/static-data.ts`:
+
+```typescript
+// ✅ GOOD - Static filter options
+export const cities = [
+  { value: 'ha-noi', label: 'Hà Nội' },
+  { value: 'ho-chi-minh', label: 'TP. Hồ Chí Minh' },
+];
+
+export const propertyTypes = [
+  { value: 'can-ho', label: 'Căn hộ chung cư' },
+  { value: 'nha-rieng', label: 'Nhà riêng' },
+];
+
+export const priceRanges = [
+  { value: '0-500', label: 'Dưới 500 triệu' },
+  { value: '500-1000', label: '500 triệu - 1 tỷ' },
+];
+```
+
+**Usage:** Imported by filter components (hero-search.tsx, etc.)
+
 ### Mock Data Organization
 Store mock data in `src/data/` with clear exports:
 
@@ -974,3 +1004,4 @@ For external URLs (future CDN integration):
 | 1.2 | 2026-02-05 | Add Image Guidelines section for Astro image optimization |
 | 1.3 | 2026-02-06 | Phase 1: Add Database & Service Layer standards (Drizzle ORM, menu service, caching, V1 soft-delete pattern) |
 | 1.4 | 2026-02-06 | Phase 2: Add Environment Variable handling, connection timeouts, build-time data loading security |
+| 1.5 | 2026-02-06 | Phase 3: Add static-data.ts pattern for UI filter options; document separation of concerns (mock-data vs menu-data vs static-data) |

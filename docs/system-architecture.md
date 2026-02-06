@@ -79,9 +79,8 @@ src/
 │   ├── footer/          # Footer section
 │   │   └── footer.astro
 │   ├── header/          # Header & navigation
-│   │   ├── header.astro
-│   │   ├── header-mobile-menu.tsx
-│   │   └── header-nav-data.ts
+│   │   ├── header.astro                      # Uses database menu + static data [Phase 3]
+│   │   └── header-mobile-menu.tsx
 │   └── home/            # Homepage sections
 │       ├── hero-section.astro
 │       ├── hero-search.tsx
@@ -91,7 +90,9 @@ src/
 │       ├── customers-section.astro
 │       └── news-section.astro
 ├── data/
-│   └── mock-properties.ts  # All mock data (properties, projects, news)
+│   ├── mock-properties.ts  # All mock data (properties, projects, news)
+│   ├── menu-data.ts        # Build-time menu generation [Phase 2]
+│   └── static-data.ts      # Static filter options (cities, types, prices) [Phase 3]
 ├── db/                     # [NEW] Database layer
 │   ├── index.ts            # Drizzle ORM client initialization
 │   ├── schema/             # Database schema definitions
@@ -155,17 +156,13 @@ Static HTML + CSS
 ```
 pages/index.astro (Homepage)
 ├── layouts/main-layout.astro
-│   ├── components/header/header.astro
-│   │   └── menu-data.ts (Build-time: getMainNavItems) [Phase 2]
-│   │       └── menu-service.ts (buildMainNav)
-│   │           ├── propertyType queries
-│   │           └── folder queries
-│   │
-│   ├── components/header/header-mobile-menu.tsx (React)
+│   ├── components/header/header.astro [Phase 3]
+│   │   ├── menu-data.ts (getMainNavItems) → Database-driven nav
+│   │   └── header-mobile-menu.tsx (React)
 │   │
 │   ├── components/home/hero-section.astro
 │   ├── components/home/hero-search.tsx (React)
-│   │   └── header-nav-data.ts (Cities, types, filters)
+│   │   └── static-data.ts (cities, propertyTypes, prices, areas) [Phase 3]
 │   │
 │   ├── components/home/featured-project-section.astro
 │   │   └── mock-properties.ts (mockProjects)
@@ -183,26 +180,36 @@ pages/index.astro (Homepage)
 │   │   └── mock-properties.ts (mockNews)
 │   │
 │   └── components/footer/footer.astro
-│       └── menu-data.ts (Build-time: getMainNavItems) [Phase 2]
-│           └── menu-service.ts (buildMainNav)
+│       └── menu-data.ts (getMainNavItems) → Database-driven nav
 ```
 
-**Database-Driven Menu Generation (Phase 2):**
+**Database-Driven Menu Generation (Phase 2-3):**
 ```
 Astro Build Process
-  ├─ menu-data.ts (getMainNavItems)
-  │   ├─ Calls buildMainNav() from menu-service.ts
-  │   │   ├─ Check in-memory cache (1-hour TTL)
-  │   │   ├─ If missing: buildMenuStructure()
-  │   │   │   ├─ fetchPropertyTypesByTransaction(1,2,3)
-  │   │   │   │   └─ Query: propertyType table (filtered by transaction_type)
-  │   │   │   ├─ fetchNewsFolders()
-  │   │   │   │   └─ Query: folder table (parent-child hierarchy)
-  │   │   │   └─ Cache result (1 hour)
-  │   │   └─ Transform to NavItem[] + children
-  │   └─ Error handling: Return FALLBACK_MENU if database unavailable
-  ├─ Build completes with static HTML
-  └─ No runtime database calls (data baked into HTML)
+  ├─ header.astro (Phase 3)
+  │   └─ Calls getMainNavItems() from menu-data.ts
+  │       └─ Calls buildMainNav() from menu-service.ts
+  │           ├─ Check in-memory cache (1-hour TTL)
+  │           ├─ If missing: buildMenuStructure()
+  │           │   ├─ fetchPropertyTypesByTransaction(1,2,3)
+  │           │   │   └─ Query: propertyType table (transaction_type)
+  │           │   ├─ fetchNewsFolders()
+  │           │   │   └─ Query: folder table (hierarchy)
+  │           │   └─ Cache result (1 hour)
+  │           └─ Transform to NavItem[] structure
+  │               ├─ label: string
+  │               ├─ href: string
+  │               └─ children?: NavItem[]
+  │   └─ Error handling: Return FALLBACK_MENU if DB unavailable
+  │
+  ├─ hero-search.tsx uses static-data.ts (Phase 3)
+  │   ├─ cities[] (Hà Nội, TP.HCM, etc.)
+  │   ├─ propertyTypes[] (Căn hộ, Nhà riêng, etc.)
+  │   ├─ priceRanges[] (500M-1T, 1-2T, etc.)
+  │   └─ areaRanges[] (<30m², 30-50m², etc.)
+  │
+  └─ Build outputs static HTML with embedded menu
+     └─ No runtime database calls (data baked into HTML)
 ```
 
 ### 3. Data Source: Mock Data
@@ -802,6 +809,7 @@ See detailed V1 schema documentation for deeper analysis:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.3 | 2026-02-06 | Phase 3 complete: Separated static-data.ts for filter dropdowns; Updated header component flow; NavItem moved to menu.ts; Removed header-nav-data.ts; Updated data flow diagrams |
 | 2.2 | 2026-02-06 | Phase 2 complete: Added build-time menu generation flow, menu-data module, environment variable loading, fallback strategy |
 | 2.1 | 2026-02-06 | Phase 1: Added menu service architecture, database schema layer, Drizzle ORM integration, caching strategy |
 | 2.0 | 2026-02-06 | Added V1 legacy architecture reference, V1→V2 comparison, data pattern reusability |

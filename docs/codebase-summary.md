@@ -11,9 +11,8 @@ tongkho-web/
 │   │   ├── footer/
 │   │   │   └── footer.astro                 # Footer with links (173 LOC)
 │   │   ├── header/
-│   │   │   ├── header.astro                 # Main navigation (95 LOC)
-│   │   │   ├── header-mobile-menu.tsx       # Mobile menu (React) (110 LOC)
-│   │   │   └── header-nav-data.ts           # Nav/filter data (109 LOC)
+│   │   │   ├── header.astro                 # Main navigation + database menu (94 LOC) [Phase 3]
+│   │   │   └── header-mobile-menu.tsx       # Mobile menu (React) (110 LOC)
 │   │   └── home/
 │   │       ├── hero-section.astro           # Hero banner (32 LOC)
 │   │       ├── hero-search.tsx              # Search form (React) (140 LOC)
@@ -24,7 +23,8 @@ tongkho-web/
 │   │       └── news-section.astro           # News articles (101 LOC)
 │   ├── data/
 │   │   ├── mock-properties.ts               # Property/project/news mock data (255 LOC)
-│   │   └── menu-data.ts                     # Menu data at build time (78 LOC) [Phase 2]
+│   │   ├── menu-data.ts                     # Menu data at build time (78 LOC) [Phase 2]
+│   │   └── static-data.ts                   # Static dropdown options (57 LOC) [Phase 3]
 │   ├── db/
 │   │   ├── index.ts                         # Drizzle ORM database client
 │   │   ├── schema/
@@ -48,7 +48,7 @@ tongkho-web/
 │   │   └── global.css                       # Tailwind + custom styles (118 LOC)
 │   ├── types/
 │   │   ├── property.ts                      # Property/Project/News interfaces (101 LOC)
-│   │   └── menu.ts                          # Menu service types (72 LOC)
+│   │   └── menu.ts                          # Menu service + NavItem types (74 LOC) [Phase 3]
 │   └── utils/
 │       └── format.ts                        # Formatting utilities (94 LOC)
 ├── public/
@@ -250,18 +250,25 @@ interface SearchFilters {
 
 **Usage:** Imported by header, footer components during build process
 
-### Navigation Data (header-nav-data.ts)
-**Purpose:** Centralized navigation structure & filter options
+### Static Data (static-data.ts) [NEW - Phase 3]
+**Purpose:** Centralized static dropdown options for filters (non-database-driven)
 
 **Exports:**
-- `mainNavItems[]` – Static menu structure (trang chủ, mua bán, cho thuê, dự án, etc.)
-- `cities[]` – Available cities for filtering
-- `propertyTypes[]` – Property type options
-- `priceRanges[]` – Price bracket options
-- `areaRanges[]` – Area bracket options
+- `cities[]` – Available cities (Hà Nội, TP.HCM, Đà Nẵng, etc.)
+- `propertyTypes[]` – Property type options (Căn hộ, Nhà riêng, Biệt thự, etc.)
+- `priceRanges[]` – Price bracket options (Dưới 500M, 500M-1T, 1-2T, etc.)
+- `areaRanges[]` – Area bracket options (<30m², 30-50m², 50-80m², etc.)
 
-**Usage:** Imported by header, hero-search, filter components
-**Note:** menu-data.ts now provides database-driven menus; header-nav-data.ts provides static fallback data
+**Data Structure:**
+```typescript
+interface StaticOption {
+  value: string;
+  label: string;
+}
+```
+
+**Usage:** Imported by hero-search, filter components for UI dropdowns
+**Note:** Separate from menu-data.ts (database-driven nav); purely static UI options
 
 ### Mock Data (mock-properties.ts)
 **Purpose:** Sample data for development & demo
@@ -395,3 +402,4 @@ npm run astro    # Astro CLI commands
 | 1.0 | 2026-01-28 | Initial codebase documentation |
 | 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration, menu type definitions |
 | 1.2 | 2026-02-06 | Phase 2 complete: Added menu-data.ts module for build-time menu generation with fallback support |
+| 1.3 | 2026-02-06 | Phase 3 complete: Extracted static-data.ts for filter options; NavItem interface moved to menu.ts; header components updated to use database-driven menu |

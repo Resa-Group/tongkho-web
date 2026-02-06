@@ -5,7 +5,14 @@
  * used by the header navigation components.
  */
 
-import type { NavItem } from '../components/header/header-nav-data';
+/**
+ * Navigation item interface
+ */
+export interface NavItem {
+  label: string;
+  href: string;
+  children?: NavItem[];
+}
 
 /**
  * Property type from database (for menu generation)
@@ -64,8 +71,3 @@ export interface MenuServiceOptions {
   cacheTTL?: number; // Cache TTL in milliseconds (default 3600000 = 1 hour)
   newsRootFolderId?: number; // Root folder ID for news (default 11)
 }
-
-/**
- * Re-export NavItem for convenience
- */
-export type { NavItem };

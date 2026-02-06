@@ -1,8 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '@/assets/images/branding/logo.webp';
-import { mainNavItems } from './header-nav-data';
+import { getMainNavItems } from '@/data/menu-data';
 import HeaderMobileMenu from './header-mobile-menu';
+
+const mainNavItems = await getMainNavItems();
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-xs">
