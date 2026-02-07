@@ -122,7 +122,12 @@ public/                     # Static assets (favicon, robots.txt)
 dist/                       # Build output (generated)
 ```
 
-**Total Code:** ~2,000 lines of TypeScript + Astro + React
+**Total Code:** 61 files, ~15,085 lines of TypeScript + Astro + React
+- Components: 32 Astro/React files (5197 LOC)
+- Pages: 8 routes + 27 dynamic folder pages (1425 LOC)
+- Database: 8 schema/migration files (6139 LOC)
+- Services: 4 service files (1026 LOC)
+- Data & types: 8 files (1050 LOC)
 
 See [docs/codebase-summary.md](./docs/codebase-summary.md) for detailed structure.
 
@@ -288,23 +293,35 @@ Any static file server works. Popular choices:
 
 ## Current Status
 
-**Phase:** Foundation (MVP Complete)
-**Version:** 1.0.0
-**Progress:** 100%
+**Phase:** Menu System Complete + Dynamic Pages In Progress
+**Version:** 2.0.0
+**Progress:** 80% (Foundation 100% + Menu 100% + Dynamic Pages 50%)
 
-### What's Done
-- ✅ Astro + React + TypeScript setup
-- ✅ Responsive homepage layout
+### What's Complete (✅ Shipped)
+- ✅ Astro 5.2 + React 19 + TypeScript 5.7 setup (zero JavaScript output)
+- ✅ Responsive homepage with 8 sections
 - ✅ Search form with filters (visual)
 - ✅ Property/project/news grids
-- ✅ Vietnamese localization
-- ✅ Sitemap generation
+- ✅ Vietnamese localization (dates, prices, slugs, relative times)
+- ✅ Sitemap generation & robots.txt
 - ✅ Mobile menu & navigation
+- ✅ **PostgreSQL integration via Drizzle ORM** (Phase 1 - Feb 6)
+- ✅ **Build-time menu generation** from database (property types, news folders)
+- ✅ **27 dynamic news folder pages** generated at /tin-tuc/danh-muc/{folder-name}
+- ✅ **32 Astro components** (about, auth, news, property, seo, ui modules)
+- ✅ **8 page routes** (homepage, about, news listing, articles, property detail)
 
-### What's Planned
-- 🔵 Phase 2: Dynamic routes & SEO (Q1 2026)
-- 🔵 Phase 3: Backend API integration (Q2 2026)
-- 🔵 Phase 4: Admin dashboard (Q2 2026)
+### What's In Progress (🔵 Active Development)
+- 🔵 Phase 2: Dynamic Pages & Full SEO (target: March 15)
+  - Property detail pages with gallery, info, contact sidebar
+  - News article detail pages with share buttons and related articles
+  - Per-page meta tags, JSON-LD structured data, Open Graph
+  - Price history chart visualization (Chart.js)
+  - Breadcrumb navigation
+
+### What's Planned (🔵 Backlog)
+- 🔵 Phase 3: Real Data Integration (Q2 2026)
+- 🔵 Phase 4: Admin Dashboard (Q2 2026)
 - 🔵 Phase 5: Advanced features (Q3 2026)
 
 See [docs/project-roadmap.md](./docs/project-roadmap.md) for detailed timeline.
@@ -313,13 +330,15 @@ See [docs/project-roadmap.md](./docs/project-roadmap.md) for detailed timeline.
 
 ## Known Limitations
 
-- Mock data only (no real backend yet)
-- No user authentication
-- No booking/transaction capability
-- Search filters are visual only (no actual filtering logic)
-- No user accounts or saved properties
+- Mock data for properties/projects/news (replaced by real data in Phase 3)
+- Search filters are visual only (functional search in Phase 3 via Elasticsearch)
+- No user authentication or accounts (planned Phase 4)
+- No booking/transaction capability (future feature)
+- No user favorites/saved properties (Phase 5 with accounts)
+- Property detail pages: gallery/info/contact components built, not yet integrated
+- Article detail pages: share buttons/related articles built, not yet integrated
 
-These will be addressed in future phases.
+See [docs/project-roadmap.md](./docs/project-roadmap.md) for phase details.
 
 ---
 
@@ -383,6 +402,8 @@ MIT License - See LICENSE file for details.
 
 ## Document Version
 
-- **Version:** 1.0
-- **Last Updated:** 2026-01-28
-- **Maintainer:** Documentation Manager
+- **Version:** 2.0
+- **Last Updated:** 2026-02-07
+- **Phase:** Menu System Complete + Dynamic Pages In Progress
+- **Components:** 32 total
+- **Pages:** 8 routes + 27 folder pages (SSG)

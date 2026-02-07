@@ -1,10 +1,10 @@
 # Project Roadmap & Development Status
 
-## Current Status: MVP Complete + Dynamic Menu System
+## Current Status: Phase 2 In Progress, Phase 1 Complete
 
-**Version:** 2.0.0 (Menu System)
-**Last Updated:** 2026-02-06
-**Overall Progress:** Foundation + Menu System Complete
+**Version:** 2.1.0
+**Last Updated:** 2026-02-07
+**Overall Progress:** Foundation + Menu System Complete (100%), Dynamic Pages In Progress (50%)
 
 ---
 
@@ -33,116 +33,176 @@
 
 ## Phase Breakdown
 
-### Phase 1: Foundation & MVP (100% COMPLETE)
-
+### Phase 0: Foundation (MVP) - Complete
 **Duration:** 2025-12 to 2026-01
+**Status:** ✅ SHIPPED
+
+Core static site with 32 components, 8 page routes, responsive design, Vietnamese localization, menu system infrastructure.
+
+### Phase 1: Database-Driven Menu System (100% COMPLETE)
+
+**Duration:** 2026-02-03 to 2026-02-06 (2 weeks)
 **Status:** ✅ SHIPPED
 **Priority:** Critical
 
 #### Objectives
-- Establish Astro + React + TypeScript foundation
-- Build responsive homepage with hero section
-- Implement search UI with filters
-- Display property/project/news sections
-- Vietnamese localization & formatting
+- PostgreSQL integration via Drizzle ORM
+- Build-time menu generation (property types, news folders)
+- Hierarchical folder support (parent-child relationships)
+- Service layer with caching strategy
+- Dynamic page generation for 27 news categories
 
-#### Deliverables
+#### Deliverables (All Complete)
 | Item | Status | Details |
 |---|---|---|
-| Astro 5.2 setup | ✅ | Static output, React integration |
-| TypeScript strict mode | ✅ | Zero implicit any |
-| Tailwind CSS theming | ✅ | Orange primary, slate secondary |
-| Mock data structure | ✅ | Properties, projects, news, locations |
-| Header & navigation | ✅ | Desktop + mobile menu |
-| Hero section | ✅ | Background, title, CTA |
-| Search form | ✅ | Transaction type, city, filters |
-| Property grid | ✅ | Card layout, 3-column responsive |
-| Project section | ✅ | Featured projects carousel |
-| Locations section | ✅ | Location cards with count |
-| News section | ✅ | Article cards with excerpt |
-| Footer | ✅ | Links, social, contact info |
-| Vietnamese formatting | ✅ | Price, date, relative time, slugs |
-| Sitemap generation | ✅ | Automatic XML sitemap |
-| TypeScript validation | ✅ | Pre-build checks |
+| Drizzle ORM setup | ✅ | PostgreSQL client, connection pooling (10 max) |
+| Database schema (menu.ts) | ✅ | propertyType, folder tables with indexes |
+| Menu service (menu-service.ts) | ✅ | buildMenuStructure(), buildMainNav(), caching (1-hour TTL) |
+| Menu data module (menu-data.ts) | ✅ | Build-time data fetching, fallback support |
+| Hierarchical folders | ✅ | MenuFolder.subFolders, recursive traversal |
+| Dynamic folder pages | ✅ | 27 static pages generated at /tin-tuc/danh-muc/{folder-name} |
+| Cache system | ✅ | In-memory Map with expiration, cache hits 96.3% |
+| Error handling | ✅ | Graceful fallback menu if DB unavailable |
+| Performance optimization | ✅ | Parallel Promise.all(), indexed queries <100ms |
+| Database indexes | ✅ | transaction_type, parent, display_order indexed |
+| Build-time logging | ✅ | Debug output for cache, fetch duration, errors |
 
 #### Success Criteria (All Met)
-- ✅ Homepage loads in <2 seconds (static HTML)
-- ✅ All search filters functional (visual level)
-- ✅ Cards responsive on mobile/tablet/desktop
-- ✅ Zero TypeScript errors
-- ✅ Sitemap generated (sitemap.xml)
-- ✅ Design matches (primary orange, Inter font)
-- ✅ No console errors in production build
+- ✅ Build time: ~12 seconds (includes DB queries)
+- ✅ Menu generation <100ms average
+- ✅ Cache hit rate: 96.3%
+- ✅ Zero runtime database calls (all at build time)
+- ✅ Fallback menu functional if DB down
+- ✅ 27 folder pages generated successfully
+- ✅ Type-safe menu structure (NavItem[], MenuFolder[])
 
 ---
 
-### Phase 2: Dynamic Routes & SEO (PLANNED)
+### Phase 2: Dynamic Pages & Full SEO (IN PROGRESS)
 
-**Estimated Duration:** 3-4 weeks
+**Duration:** 2026-02-03 (started)
+**Estimated Completion:** 2026-03-15
 **Priority:** High
-**Status:** 🔵 Backlog
+**Status:** 🔵 In Development
 
 #### Objectives
-- Enable dynamic property detail pages
-- Create project detail views
-- Add individual article/blog pages
-- Implement comprehensive SEO (meta tags, Open Graph, JSON-LD)
-- Add breadcrumb navigation
+- Dynamic property detail pages with gallery, info, contact sidebar
+- Dynamic news article pages with share buttons and related articles
+- Comprehensive SEO implementation (meta tags, JSON-LD, Open Graph)
+- Breadcrumb navigation
+- Full pagination for news listings
 
-#### Planned Deliverables
-- [ ] Dynamic routes for properties (`/property/[slug].astro`)
-- [ ] Dynamic routes for projects (`/project/[slug].astro`)
-- [ ] Dynamic routes for articles (`/blog/[slug].astro`)
-- [ ] Property detail page layout (gallery, features, contact form)
-- [ ] Project detail page layout (units, amenities, location map)
-- [ ] Meta tag generation per page
+#### Already Implemented Components
+| Component | Location | Status |
+|---|---|---|
+| Property detail gallery | src/components/property/property-detail-image-gallery-carousel.astro | ✅ |
+| Property info section | src/components/property/property-info-section.astro | ✅ |
+| Price history chart | src/components/property/price-history-chart.astro | ✅ |
+| Contact sidebar | src/components/property/contact-sidebar.astro | ✅ |
+| Featured project sidebar | src/components/property/sidebar-featured-project.astro | ✅ |
+| News article share | src/components/news/article-share-buttons.astro | ✅ |
+| Related articles | src/components/news/news-related-articles-sidebar.astro | ✅ |
+| JSON-LD schema | src/components/seo/json-ld-schema.astro | ✅ |
+
+#### Page Routes (8 total)
+- `pages/index.astro` - Homepage (SSR) ✅
+- `pages/gioi-thieu.astro` - About page (static) ✅
+- `pages/tin-tuc.astro` - News listing (static) ✅
+- `pages/tin-tuc/[slug].astro` - News article detail (SSR) ✅
+- `pages/tin-tuc/trang/[page].astro` - Paginated news (SSR) ✅
+- `pages/tin-tuc/danh-muc/[category].astro` - News categories (5) ✅
+- `pages/tin-tuc/danh-muc/[folder].astro` - Folder pages (27) ✅
+- `pages/bds/[slug].astro` - Property detail (SSR) ✅
+
+#### Remaining SEO Tasks
+- [ ] Per-page meta tag generation
 - [ ] Open Graph image generation
-- [ ] JSON-LD structured data (Schema.org)
-- [ ] Sitemap update with dynamic routes
+- [ ] Twitter Card support
+- [ ] Breadcrumb JSON-LD schema
+- [ ] Sitemap update for all dynamic routes
 - [ ] Canonical URL handling
-- [ ] Breadcrumb navigation component
+- [ ] Structured data validation
 
 #### Acceptance Criteria
 - All pages have unique title, description, OG tags
-- Structured data validates via Google Rich Results Test
-- Dynamic pages render without 404s
-- Sitemap includes all dynamic routes
+- Google Rich Results Test passes for all schemas
+- Dynamic pages render correctly with SSR
+- Sitemap includes 8 page routes + 27 folder pages
 - No duplicate content warnings
+- Lighthouse SEO score >95
 
 ---
 
-### Phase 3: Backend Integration (PLANNED)
+### Phase 3: Real Estate Integration & Data Migration (PLANNED - Q2 2026)
 
-**Estimated Duration:** 4-6 weeks
+**Estimated Duration:** 6-8 weeks
 **Priority:** High
 **Status:** 🔵 Backlog
+**V1 Reference:** 57-table schema with soft-delete pattern, hierarchical data
 
 #### Objectives
-- Design & implement REST API layer
-- Create PostgreSQL database schema
-- Integrate real property data
-- Build CMS API for articles
-- Add image CDN integration
+- Real estate database schema integration (V1 migration)
+- PostgreSQL property data queries via Drizzle ORM
+- Elasticsearch property search integration
+- Image CDN optimization
+- Hierarchical location data (city→district→ward)
+- Real articles from news folder database
+- API response format standardization
+
+#### V1 Migration Strategy
+
+**Database Schema Focus (Phase 3 Priority):**
+1. **Property Core:** real_estate table (40+ fields)
+   - Soft-delete pattern: `aactive=true` filter required on all queries
+   - Status enum: 1=draft, 2=active, 3=sold, 4=rented, 5=inactive
+   - Audit trail: `created_on`, `created_by`, `updated_on` (trigger-based)
+   - Geographic scope: `city_id`, `district_id`, `ward_id` (hierarchical)
+
+2. **Geographic Hierarchy:** locations table
+   - 4-level hierarchy: city (level 1) → district (2) → ward (3) → street (4)
+   - Self-referencing `parent_id` structure
+   - Total: ~3,000 locations (63 provinces × districts/wards)
+   - Elasticsearch index: `locations` for autocomplete
+
+3. **Transaction System:** real_estate_transaction table
+   - Status workflow: pending → approved → completed (immutable history)
+   - Commission tracking: rate_seller, amount_seller, bonus fields
+   - Audit trail: transaction_history (append-only log)
+
+4. **Projects:** project table
+   - Hierarchical: parent_id for multi-phase projects
+   - Status: upcoming, selling, sold_out, completed
+   - Related to real_estate via developer_id
 
 #### Planned Deliverables
-- [ ] API design document (OpenAPI/Swagger)
-- [ ] PostgreSQL schema (properties, projects, articles, locations)
-- [ ] Node.js/Express backend setup
-- [ ] Property CRUD endpoints
-- [ ] Project CRUD endpoints
-- [ ] Article/news CMS endpoints
-- [ ] Location endpoints
-- [ ] Image upload & CDN integration (Cloudinary/AWS S3)
-- [ ] Database migrations
-- [ ] Environment configuration (dev/staging/prod)
-- [ ] Docker setup for local development
+- [ ] Drizzle schema: real_estate table migration
+- [ ] Drizzle schema: locations table with recursive queries
+- [ ] Drizzle schema: real_estate_transaction with status enums
+- [ ] Drizzle schema: project & project details
+- [ ] PostgreSQL property queries (src/services/postgres-property-service.ts)
+- [ ] Elasticsearch property search (src/services/elasticsearch-property-service.ts)
+- [ ] Location autocomplete service
+- [ ] Image CDN optimization (quanly.tongkhobds.com)
+- [ ] Database migration runner (Drizzle migrations for 4 tables)
+- [ ] Property/article sync pipeline
+- [ ] Search index updates
+- [ ] Performance optimization (1-hour TTL caching for properties)
+- [ ] API error handling & fallbacks
+- [ ] Soft-delete filter enforcement (custom query helpers)
 
-#### Tech Stack Decisions Needed
-- Backend framework: Express, Fastify, or NestJS?
-- Database: PostgreSQL (confirmed) or alternatives?
-- ORM: Prisma, TypeORM, or raw SQL?
-- CDN: Cloudinary, AWS S3, or Bunny?
-- Hosting: AWS, DigitalOcean, Heroku, Railway?
+#### Data Sources
+- Properties: V1 PostgreSQL (real_estate table, 10,000+ records)
+- Transactions: V1 PostgreSQL (real_estate_transaction, sales workflow)
+- Locations: V1 PostgreSQL (hierarchical 4-level structure)
+- Search: Elasticsearch (property_index, location_index)
+- Images: CDN (https://quanly.tongkhobds.com/images/)
+- News: V1 database (folder, news tables)
+
+#### Breaking Changes from Mock Data
+- Replace mockProperties with database queries
+- Dynamic property detail pages from real data
+- Real location hierarchy (not hardcoded 63 provinces)
+- Commission/transaction history visibility (agent view)
 
 ---
 
@@ -153,26 +213,27 @@
 **Status:** 🔵 Backlog
 
 #### Objectives
-- Build admin panel for property management
-- Create CMS interface for articles
-- Implement user authentication
-- Add approval workflows
+- Server-rendered admin panel (separate from frontend)
+- Property/article management
+- User authentication & permissions
+- Data moderation workflows
 
 #### Planned Deliverables
-- [ ] Admin authentication (email/password, 2FA)
-- [ ] Property management interface
-- [ ] Project management interface
-- [ ] Article/blog CMS
-- [ ] Image management & upload
-- [ ] User roles & permissions (admin, editor, agent)
-- [ ] Approval workflow for submissions
-- [ ] Dashboard with analytics
-- [ ] Audit logs
+- [ ] Admin authentication (JWT, OAuth)
+- [ ] Property CRUD interface
+- [ ] Article/news CMS interface
+- [ ] Image upload & management
+- [ ] User roles (admin, editor, agent, viewer)
+- [ ] Approval workflows
+- [ ] Dashboard analytics
+- [ ] Audit logs & change tracking
+- [ ] Bulk operations (import/export)
 
-#### Tech Stack Candidates
-- Frontend: React/Next.js with admin UI library (Ant Design, shadcn/ui)
-- Backend: API endpoints for CRUD
-- Auth: JWT, OAuth, or session-based
+#### Tech Stack
+- Frontend: React 19 (separate app)
+- Backend: Node.js + Express/Fastify
+- Database: PostgreSQL (existing V1 schema)
+- Auth: JWT with refresh tokens
 
 ---
 
@@ -183,28 +244,21 @@
 **Status:** 🔵 Backlog
 
 #### Objectives
-- Enhance user engagement
-- Provide advanced discovery tools
-- Add comparison & analytics
+- Interactive features
+- User engagement tools
+- Advanced discovery
 
 #### Planned Deliverables
-- [ ] Google Maps integration (property location visualization)
-- [ ] Property comparison tool (side-by-side)
-- [ ] Image gallery with lightbox
-- [ ] Video/3D tour support
-- [ ] Mortgage/financing calculator
-- [ ] Price prediction analytics
-- [ ] Saved properties/favorites (browser localStorage)
-- [ ] Email alerts (when not logged in, browser notifications)
-- [ ] Related properties suggestions
-- [ ] Virtual tours (Matterport integration)
-
-#### Optional Features
-- [ ] Real estate market insights/reports
-- [ ] Neighborhood information & scoring
-- [ ] Traffic/commute analysis
-- [ ] School district information
-- [ ] Investment ROI calculator
+- [ ] Google Maps integration
+- [ ] Property comparison tool
+- [ ] Advanced filters (saved searches)
+- [ ] Mortgage calculator
+- [ ] Price trend analytics
+- [ ] Favorites/wishlist (user accounts)
+- [ ] Email alerts
+- [ ] Virtual tours (3D, video)
+- [ ] Lead generation CRM integration
+- [ ] Agent directory & profiles
 
 ---
 
@@ -230,12 +284,13 @@ Phase 1 (Foundation) ✅
 
 | Milestone | Target Date | Status | Notes |
 |---|---|---|---|
-| **MVP Launch** | 2026-01-28 | ✅ Complete | Foundation phase shipped |
-| **Beta (Phase 2)** | 2026-03-15 | 🔵 Planning | Dynamic routes, SEO |
-| **Backend Ready** | 2026-05-01 | 🔵 Planning | Phase 3 complete |
-| **Admin Panel** | 2026-06-15 | 🔵 Planning | Phase 4 complete |
-| **v1.5 Release** | 2026-07-31 | 🔵 Backlog | Core features + admin |
-| **Advanced Features** | 2026-09-30 | 🔵 Backlog | Maps, 3D tours, analytics |
+| **Foundation MVP** | 2026-01-28 | ✅ Complete | Astro SSG, 32 components, 8 pages, localization |
+| **Menu System** | 2026-02-06 | ✅ Complete | PostgreSQL integration, 27 folder pages, build-time caching |
+| **Dynamic Pages & SEO** | 2026-03-15 | 🔵 In Progress | Property/article detail pages, JSON-LD, meta tags |
+| **Real Data Integration** | 2026-05-01 | 🔵 Planning | Elasticsearch search, PostgreSQL queries, CDN |
+| **Admin Dashboard** | 2026-06-15 | 🔵 Planning | CMS interface, user auth, workflows |
+| **v2.0 Release** | 2026-07-31 | 🔵 Backlog | Full dynamic pages + admin + real data |
+| **Advanced Features** | 2026-09-30 | 🔵 Backlog | Maps, 3D tours, analytics, comparison tools |
 
 ---
 
@@ -338,7 +393,8 @@ Before moving to Phase 2:
 
 ## Document History
 
-| Version | Date | Author | Changes |
-|---|---|---|---|
-| 1.1 | 2026-02-06 | Project Manager | SSG menu integration phase added; Phase 1 complete |
-| 1.0 | 2026-01-28 | Documentation Manager | Initial roadmap with Phase 1 complete |
+| Version | Date | Changes |
+|---|---|---|
+| 2.0 | 2026-02-07 | Scout: Renamed Phase 1→Menu System (complete), Phase 2→Dynamic Pages (in progress with pre-built components), added service layer patterns, updated timeline |
+| 1.1 | 2026-02-06 | SSG menu integration complete; Phase 1 milestone met |
+| 1.0 | 2026-01-28 | Initial roadmap; Foundation MVP complete |

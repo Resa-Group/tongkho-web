@@ -47,10 +47,27 @@
 - **Autoprefixer:** Vendor prefix handling
 - **Custom CSS:** Scoped styles in Astro components
 
-### Database Layer [NEW - Phase 1]
-- **Drizzle ORM:** TypeScript-first ORM for PostgreSQL
-- **PostgreSQL:** Backend database (V1 legacy schema)
-- **Database Client:** postgres-js library for connection pooling
+### Database Layer [Phase 1-2] - V1 Migration Ready
+
+**Architecture:**
+- **Drizzle ORM:** TypeScript-first ORM for PostgreSQL (type-safe queries)
+- **PostgreSQL:** Backend database (V1 legacy schema with 57 tables)
+- **Database Client:** postgres-js library (max 10 connections, pooling)
+- **Elasticsearch:** Search engine for properties, projects, locations (Phase 4)
+
+**V1 Schema Reference:**
+- 57 active tables (core: real_estate, real_estate_transaction, project, consultation)
+- 120+ foreign key relationships (hierarchical data patterns)
+- Soft-delete pattern: `aactive=false` (never hard DELETE)
+- Status enum fields: integer codes (1-5 range)
+- Audit trail: `created_on`, `created_by`, `updated_on` (via triggers)
+- Hierarchical data: self-referencing `parent_id` (locations, office, folders)
+
+**Migration Path:**
+- Phase 1-2: Menu system only (property_type, folder tables)
+- Phase 3: Real estate schema (full property, project, news tables)
+- Phase 4: Financial domain (commission, withdrawal, reconciliation)
+- Phase 5: Office/staff system (post_office, office_staff hierarchy)
 
 ### Content & Assets
 - **Mock Data:** TypeScript arrays in `src/data/` (fallback)
@@ -74,21 +91,17 @@
 ```
 src/
 ├── components/
-│   ├── cards/           # Reusable card components
-│   │   └── property-card.astro
-│   ├── footer/          # Footer section
-│   │   └── footer.astro
-│   ├── header/          # Header & navigation
-│   │   ├── header.astro                      # Uses database menu + static data [Phase 3]
-│   │   └── header-mobile-menu.tsx
-│   └── home/            # Homepage sections
-│       ├── hero-section.astro
-│       ├── hero-search.tsx
-│       ├── featured-project-section.astro
-│       ├── properties-section.astro
-│       ├── locations-section.astro
-│       ├── customers-section.astro
-│       └── news-section.astro
+│   ├── about/           # About page (team, achievements)
+│   ├── auth/            # Authentication modal
+│   ├── cards/           # Property card
+│   ├── footer/          # Footer with nav & links
+│   ├── header/          # Header & database-driven navigation
+│   ├── home/            # Homepage sections (8: hero, projects, properties, locations, news, partners, press, download-app)
+│   ├── news/            # News article components (share buttons, related articles)
+│   ├── property/        # Property detail (gallery, info, contact, price chart, related)
+│   ├── seo/             # JSON-LD structured data
+│   ├── ui/              # Dropdowns (location with 63 provinces, property type), range sliders, checkbox, pagination, share buttons
+│   └── scroll-to-top-button.astro
 ├── data/
 │   ├── mock-properties.ts  # All mock data (properties, projects, news)
 │   ├── menu-data.ts        # Build-time menu generation [Phase 2]
@@ -111,8 +124,14 @@ src/
 │   ├── base-layout.astro   # HTML <head>, meta tags, fonts
 │   └── main-layout.astro   # Header + <main> + footer wrapper
 ├── pages/
-│   ├── index.astro         # Homepage
-│   └── tin-tuc/danh-muc/[folder].astro  # Dynamic news folder pages [Phase 4]
+│   ├── index.astro         # Homepage (SSR)
+│   ├── gioi-thieu.astro    # About page (static)
+│   ├── tin-tuc.astro       # News listing (static, 9 per page)
+│   ├── tin-tuc/[slug].astro # News article detail (SSR)
+│   ├── tin-tuc/trang/[page].astro # Paginated news (SSR)
+│   ├── tin-tuc/danh-muc/[category].astro # Category filter (5)
+│   ├── tin-tuc/danh-muc/[folder].astro # Dynamic folder pages (27)
+│   └── bds/[slug].astro    # Property detail (SSR)
 ├── styles/
 │   └── global.css          # Global Tailwind + custom styles
 ├── types/
@@ -153,35 +172,42 @@ Tailwind CSS Processing
 Static HTML + CSS
 ```
 
-### 2. Component Composition
+### 2. Component Composition (Multi-Page)
+
+**Homepage & Core Pages:**
 ```
-pages/index.astro (Homepage)
+pages/index.astro (Homepage, SSR)
 ├── layouts/main-layout.astro
-│   ├── components/header/header.astro [Phase 3]
-│   │   ├── menu-data.ts (getMainNavItems) → Database-driven nav
-│   │   └── header-mobile-menu.tsx (React)
-│   │
-│   ├── components/home/hero-section.astro
-│   ├── components/home/hero-search.tsx (React)
-│   │   └── static-data.ts (cities, propertyTypes, prices, areas) [Phase 3]
-│   │
-│   ├── components/home/featured-project-section.astro
-│   │   └── mock-properties.ts (mockProjects)
-│   │
-│   ├── components/home/properties-section.astro
-│   │   ├── components/cards/property-card.astro
-│   │   └── mock-properties.ts (mockProperties)
-│   │
-│   ├── components/home/locations-section.astro
-│   │   └── mock-properties.ts (mockLocations)
-│   │
-│   ├── components/home/customers-section.astro
-│   │
-│   ├── components/home/news-section.astro
-│   │   └── mock-properties.ts (mockNews)
-│   │
-│   └── components/footer/footer.astro
-│       └── menu-data.ts (getMainNavItems) → Database-driven nav
+│   ├── header (Database-driven nav from PostgreSQL)
+│   ├── 8 homepage sections
+│   ├── footer (Database-driven nav)
+│   └── JSON-LD structured data
+
+pages/gioi-thieu.astro (About, static)
+├── Team member cards + achievement stats
+
+pages/bds/[slug].astro (Property Detail, SSR)
+├── Image gallery carousel
+├── Property info section
+├── Contact sidebar
+├── Price history chart (Chart.js)
+├── Featured project sidebar
+├── Related properties
+
+pages/tin-tuc.astro (News Listing, static)
+├── Article cards
+├── Pagination (9 per page)
+├── Category filters
+
+pages/tin-tuc/[slug].astro (News Article, SSR)
+├── Article share buttons
+├── Related articles sidebar
+├── Author & date info
+
+pages/tin-tuc/danh-muc/[folder].astro (Folder Pages, SSG)
+├── 27 dynamic category pages auto-generated
+├── News articles filtered by folder
+├── Hierarchical navigation
 ```
 
 **Database-Driven Menu Generation (Phase 4):**
@@ -551,222 +577,12 @@ areaRanges[]     → < 30m², 30-50m², 50-80m², etc.
 
 ---
 
-## V1 Legacy Architecture (Reference)
+## Referenced Documentation
 
-TongKho V1 (Web2py + PostgreSQL + Elasticsearch) is the legacy system from which the new Astro-based frontend evolved. Understanding V1 patterns helps contextualize data source decisions.
-
-### V1 Technology Stack
-- **Framework:** Web2py (Python web framework)
-- **ORM:** PyDAL (Python Data Abstraction Layer)
-- **Database:** PostgreSQL (57 tables across 6 domains)
-- **Search:** Elasticsearch (3 indexes: real_estate, project, locations)
-- **Frontend:** Server-rendered HTML templates (Vue.js, traditional MVC)
-
-### V1 System Architecture
-
-```
-┌────────────────────────────────────────────────┐
-│          WEB2PY APPLICATION LAYER              │
-│  (Controllers + Models + Views)                │
-└────────────────────────────────────────────────┘
-              ↓          ↑
-        HTTP Requests   HTML Responses
-              ↓          ↑
-┌────────────────────────────────────────────────┐
-│       PostgreSQL DATABASE                      │
-│  ├─ Real Estate (property, transaction, etc)  │
-│  ├─ Office System (hierarchy, staff, roles)   │
-│  ├─ Permission & Menu (ACL system)            │
-│  ├─ Messaging (SMS, Zalo, notifications)      │
-│  ├─ Financial (banking, commissions)          │
-│  └─ Configuration (enums, tags, SEO)          │
-└────────────────────────────────────────────────┘
-              ↓          ↑
-        INSERT/UPDATE   SELECT queries
-              ↓          ↑
-┌────────────────────────────────────────────────┐
-│    ELASTICSEARCH CLUSTER                       │
-│  ├─ real_estate index (40+ fields)            │
-│  ├─ project index (15+ fields)                │
-│  └─ locations index (autocomplete)            │
-└────────────────────────────────────────────────┘
-              ↓
-        JSON Search Results
-              ↓
-   Client-Side Rendering (Vue.js)
-              ↓
-     Web Browser (User)
-```
-
-### V1 Key Features
-- **Real-Time Property Sync:** DB insert → auto-index in ES
-- **Geographic Hierarchy:** 5-level office structure (Vùng→Tỉnh→Huyện→Xã→Tổ)
-- **Soft-Delete Pattern:** All records have `aactive` flag (not hard DELETE)
-- **Audit Trail:** 95% transactional table coverage with `created_on`, `created_by`, `updated_on`
-- **Permission Model (V4):** auth_group + post_office_id + function_scope_permission with JSON conditions
-- **Batch Processing:** Location mapping sync (2000-20000 records), commission accrual jobs
-
-### V1 Search Query Pipeline
-```
-User Search Input
-    ↓
-real_estate_handle.py (controller)
-    ├─ Parse filters (city, district, property type, price range)
-    ├─ Geo-distance expansion (5km default radius)
-    ├─ Location ID expansion (via LocationHandler)
-    └─ Featured logic (context-aware)
-    ↓
-BUILD ELASTICSEARCH QUERY
-    ├─ Base condition: aactive=true + slug exists
-    ├─ Complex bool query (must/should/filter/must_not)
-    ├─ Pagination: from/size (max 1000 for geo)
-    └─ Sort: created_time desc (default)
-    ↓
-Elasticsearch Response
-    ├─ 40+ field hits (id, title, price, latlng, etc)
-    ├─ Script field: created_time_updated (UTC+7 formatted)
-    └─ Track total hits: accurate count
-    ↓
-CONVERT TO DAL FORMAT
-    ├─ Field transformations (latlng dict → string)
-    ├─ Timezone normalization
-    └─ Fallback on parse errors
-    ↓
-Web2py Controller Returns JSON → Vue.js Renders
-```
-
----
-
-## V1 vs V2 Comparison
-
-| Aspect | V1 (Legacy) | V2 (New Astro) | Purpose |
-|--------|-----------|----------------|---------|
-| **Framework** | Web2py (Python, server-rendered) | Astro 5.2 (TypeScript, static-generated) | Simplify tech stack, improve performance |
-| **Frontend** | Server-side templates + Vue.js | React components (prerendered to HTML) | Reduce JavaScript overhead, improve SEO |
-| **Deployment** | Application server + database | Static files + CDN | Eliminate server management, scale globally |
-| **Database** | PostgreSQL (production DB) | Mock data (static in repo, future: API) | Separate frontend from backend concerns |
-| **Search** | Elasticsearch direct integration | Future: Decoupled search API | Decouple frontend from search infrastructure |
-| **Data Binding** | Real-time DB-ES sync (application logic) | Future: Static content + backend API | Stateless frontend architecture |
-| **JavaScript** | Vue.js interactive UI | Zero (prerendered static HTML) | Improved performance, accessibility, SEO |
-| **SEO** | Server-side rendering (good) | Static HTML output (excellent) | Better search engine indexing |
-| **Build Complexity** | Simple (direct execution) | Multi-step (TypeScript → HTML) | Trade: complexity for performance |
-| **Scalability** | Vertical (upgrade server) | Horizontal (CDN + static caching) | Global distribution without backend scaling |
-
-### Migration Path: V1 → V2
-```
-Phase 1: Static Frontend (Current)
-  ├─ Homepage only
-  ├─ Mock data in TypeScript
-  └─ No backend integration
-
-Phase 2: Dynamic Content (Next)
-  ├─ Property detail pages (dynamic routes)
-  ├─ Link to V1 API endpoints (REST calls from client)
-  └─ Location autocomplete from Elasticsearch
-
-Phase 3: Full Backend Integration (Future)
-  ├─ New API layer (decoupled from V1)
-  ├─ Real database (replace mock data)
-  ├─ Authentication/authorization
-  └─ Admin dashboard (server-rendered)
-
-Phase 4: Legacy System Replacement
-  ├─ V1 API deprecation
-  ├─ Data migration (PostgreSQL → new schema)
-  └─ ES index rebuild (new mappings)
-```
-
----
-
-## Data Pattern Reusability (V1 → V2)
-
-### Soft-Delete Pattern
-**V1 Implementation:** All tables have `aactive` boolean field
-```sql
-UPDATE real_estate SET aactive=FALSE WHERE id=123  -- Soft delete
-SELECT * FROM real_estate WHERE aactive=TRUE       -- Query filter
-```
-
-**V2 Recommendation:** Adopt same pattern for audit trail preservation
-```typescript
-// Component receives properties, filters locally
-const activeProperties = properties.filter(p => p.isActive);
-```
-
----
-
-### Audit Trail Pattern
-**V1 Implementation:** `created_on`, `created_by`, `updated_on` on all transactional tables
-- PostgreSQL trigger auto-maintains `updated_on`
-- `transaction_history` table provides immutable state change log
-
-**V2 Recommendation:** When implementing backend API
-```typescript
-// API response includes audit metadata
-interface AuditedEntity {
-  id: string;
-  createdAt: ISO8601;
-  createdBy: string;
-  updatedAt: ISO8601;
-}
-```
-
----
-
-### Hierarchical Office Structure
-**V1 Implementation:** Self-referencing `parent_id` in `post_office` table, 5-level hierarchy
-- Unlimited depth possible
-- Level constraints enforced via CHECK (1-5)
-
-**V2 Recommendation:** Recursive data structure for admin features
-```typescript
-interface OfficeHierarchy {
-  id: string;
-  name: string;
-  level: 1 | 2 | 3 | 4 | 5;
-  parentId: string | null;
-  children?: OfficeHierarchy[];
-}
-```
-
----
-
-### Geographic Scoping
-**V1 Implementation:** Hierarchical locations (city → district → ward → street)
-- Elasticsearch `locations` index for autocomplete
-- Location mapping batch sync (periodic job)
-
-**V2 Recommendation:** Use Elasticsearch locations index as data source
-```typescript
-// Frontend autocomplete search
-const locations = await es.search({
-  index: 'locations',
-  q: 'Hà',
-  fields: ['n_name', 'n_normalizedname']
-});
-```
-
----
-
-### Permission Model (Function-Level Data Scoping)
-**V1 Implementation:** JSON-based `function_scope_permission.conditions`
-```json
-{
-  "operator": "AND",
-  "conditions": [
-    {"field": "post_office_id", "operator": "in", "values": [1, 2]},
-    {"field": "status", "operator": "not_in", "values": [5]}
-  ]
-}
-```
-
-**V2 Recommendation:** Frontend enforcement for static content (no auth yet)
-```typescript
-// Future: Server-side filtering via API
-const visibleProperties = properties.filter(p =>
-  userOffices.includes(p.officeId) && p.status !== 5
-);
-```
+See legacy V1 architecture details in separate files:
+- [V1 Database Schema Reference](./v1-database-schema.md) - 57 tables, 120+ relationships
+- [V1 Elasticsearch Schema Reference](./v1-elasticsearch-schema.md) - 3 indexes, search patterns
+- [V1 Data Flow & Synchronization](./v1-data-flow.md) - Real-time sync, batch processing
 
 ---
 
@@ -856,9 +672,10 @@ See detailed V1 schema documentation for deeper analysis:
 
 | Version | Date | Changes |
 |---|---|---|
-| 2.4 | 2026-02-06 | Phase 4 complete: Hierarchical news folder support with parent-child relationships; fetchSubFolders() for recursive queries; folderToNavItem() recursive transformation; Dynamic [folder].astro pages generating 27 static folder pages at /tin-tuc/danh-muc/{folder-name} |
-| 2.3 | 2026-02-06 | Phase 3 complete: Separated static-data.ts for filter dropdowns; Updated header component flow; NavItem moved to menu.ts; Removed header-nav-data.ts; Updated data flow diagrams |
-| 2.2 | 2026-02-06 | Phase 2 complete: Added build-time menu generation flow, menu-data module, environment variable loading, fallback strategy |
-| 2.1 | 2026-02-06 | Phase 1: Added menu service architecture, database schema layer, Drizzle ORM integration, caching strategy |
-| 2.0 | 2026-02-06 | Added V1 legacy architecture reference, V1→V2 comparison, data pattern reusability |
-| 1.0 | 2026-01-28 | Initial system architecture documentation |
+| 3.0 | 2026-02-07 | Scout: 32 components across 10 categories (about, auth, news, property, seo, ui, home), 8 page routes (index, about, news listing, article detail, property detail, category filters, 27 folder pages), multi-page component composition patterns, service layers (elasticsearch, postgres, menu) |
+| 2.4 | 2026-02-06 | Phase 4: Hierarchical news folders, 27 dynamic folder pages, recursive transformation patterns |
+| 2.3 | 2026-02-06 | Phase 3: static-data.ts module, separated concerns (mock vs menu vs static data) |
+| 2.2 | 2026-02-06 | Phase 2: Build-time menu generation, environment loading, fallback strategy |
+| 2.1 | 2026-02-06 | Phase 1: Menu service, Drizzle ORM, caching with 1-hour TTL |
+| 2.0 | 2026-02-06 | V1 legacy architecture reference, migration path |
+| 1.0 | 2026-01-28 | Initial documentation |

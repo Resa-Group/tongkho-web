@@ -13,14 +13,42 @@ tongkho-web/
 │   │   ├── header/
 │   │   │   ├── header.astro                 # Main navigation + database menu (94 LOC) [Phase 3]
 │   │   │   └── header-mobile-menu.tsx       # Mobile menu (React) (110 LOC)
-│   │   └── home/
-│   │       ├── hero-section.astro           # Hero banner (32 LOC)
-│   │       ├── hero-search.tsx              # Search form (React) (140 LOC)
-│   │       ├── featured-project-section.astro # Projects grid (117 LOC)
-│   │       ├── properties-section.astro     # Properties grid (64 LOC)
-│   │       ├── locations-section.astro      # Location cards (120 LOC)
-│   │       ├── customers-section.astro      # Testimonials (65 LOC)
-│   │       └── news-section.astro           # News articles (101 LOC)
+│   │   ├── about/
+│   │   │   ├── about-team-member-card.astro
+│   │   │   └── about-achievement-stat-card.astro
+│   │   ├── auth/
+│   │   │   └── auth-modal.astro             # Full authentication modal
+│   │   ├── home/
+│   │   │   ├── hero-section.astro           # Hero banner
+│   │   │   ├── hero-search.astro            # Search form (Astro)
+│   │   │   ├── featured-project-section.astro # Projects grid
+│   │   │   ├── properties-section.astro     # Properties grid
+│   │   │   ├── locations-section.astro      # Location cards
+│   │   │   ├── customers-section.astro      # Testimonials
+│   │   │   ├── news-section.astro           # News articles
+│   │   │   ├── download-app-section.astro   # App download CTA
+│   │   │   ├── partners-section.astro       # Partner logos (6)
+│   │   │   └── press-coverage-section.astro # Media mentions
+│   │   ├── news/
+│   │   │   ├── article-share-buttons.astro  # Social share
+│   │   │   └── news-related-articles-sidebar.astro
+│   │   ├── property/
+│   │   │   ├── property-detail-image-gallery-carousel.astro
+│   │   │   ├── property-info-section.astro
+│   │   │   ├── price-history-chart.astro    # Chart.js visualization
+│   │   │   ├── contact-sidebar.astro
+│   │   │   ├── sidebar-featured-project.astro
+│   │   │   └── sidebar-filter-list.astro
+│   │   ├── seo/
+│   │   │   └── json-ld-schema.astro         # Structured data
+│   │   ├── ui/
+│   │   │   ├── checkbox.astro
+│   │   │   ├── location-dropdown.astro      # 63 provinces
+│   │   │   ├── property-type-dropdown.astro
+│   │   │   ├── range-slider-dropdown.astro
+│   │   │   ├── pagination.astro
+│   │   │   └── share-buttons.astro
+│   │   └── scroll-to-top-button.astro
 │   ├── data/
 │   │   ├── mock-properties.ts               # Property/project/news mock data (255 LOC)
 │   │   ├── menu-data.ts                     # Menu data at build time (78 LOC) [Phase 2]
@@ -43,8 +71,14 @@ tongkho-web/
 │   │   ├── base-layout.astro                # HTML base template (65 LOC)
 │   │   └── main-layout.astro                # Header + main + footer (35 LOC)
 │   ├── pages/
-│   │   ├── index.astro                      # Homepage (32 LOC)
-│   │   └── tin-tuc/danh-muc/[folder].astro  # Dynamic folder pages (14 LOC) [Phase 4]
+│   │   ├── index.astro                      # Homepage (SSR)
+│   │   ├── gioi-thieu.astro                 # About page
+│   │   ├── tin-tuc.astro                    # News listing (9 per page)
+│   │   ├── tin-tuc/[slug].astro             # News article detail (SSR)
+│   │   ├── tin-tuc/trang/[page].astro       # Paginated news (SSR)
+│   │   ├── tin-tuc/danh-muc/[category].astro # Category filter
+│   │   ├── tin-tuc/danh-muc/[folder].astro  # Dynamic folder pages (27 pages)
+│   │   └── bds/[slug].astro                 # Property detail (SSR)
 │   ├── styles/
 │   │   └── global.css                       # Tailwind + custom styles (118 LOC)
 │   ├── types/
@@ -64,7 +98,13 @@ tongkho-web/
 └── README.md                                # Project documentation
 ```
 
-**Total:** ~2,500 lines of code (including new database layer)
+**Total:** ~15,085 lines of code across 61 files
+- Components: 32 files (5197 LOC) across 9 categories (About, Auth, Cards, Footer, Header, Home, News, Property, SEO, UI)
+- Pages: 8 route files + 27 dynamic folder pages (1425 LOC)
+- Database: 8 files (6139 LOC) - schemas, migrations, indexes
+- Services: 4 files (1026 LOC) - menu, elasticsearch, postgres services
+- Data & Types: 8 files (1050 LOC) - mock data, static data, type definitions
+- Utils & Layouts: 4 files (247 LOC)
 
 ---
 
@@ -405,7 +445,8 @@ npm run astro    # Astro CLI commands
 | Version | Date | Changes |
 |---|---|---|
 | 1.0 | 2026-01-28 | Initial codebase documentation |
-| 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration, menu type definitions |
-| 1.2 | 2026-02-06 | Phase 2 complete: Added menu-data.ts module for build-time menu generation with fallback support |
-| 1.3 | 2026-02-06 | Phase 3 complete: Extracted static-data.ts for filter options; NavItem interface moved to menu.ts; header components updated to use database-driven menu |
-| 1.4 | 2026-02-06 | Phase 4 complete: Hierarchical news folder support; Added MenuFolder.subFolders field for nested categories; fetchSubFolders() for recursive queries; Dynamic folder pages at /tin-tuc/danh-muc/[folder]; 27 static pages generated at build time |
+| 1.1 | 2026-02-06 | Phase 1 complete: Added menu service layer, database schema (propertyType, folder), Drizzle ORM integration |
+| 1.2 | 2026-02-06 | Phase 2 complete: Added menu-data.ts, build-time menu generation with fallback support |
+| 1.3 | 2026-02-06 | Phase 3 complete: Extracted static-data.ts for filter options; database-driven header navigation |
+| 1.4 | 2026-02-06 | Phase 4 complete: Hierarchical news folders, dynamic folder pages (27 total), recursive data structures |
+| 2.0 | 2026-02-07 | Scout report: Added 32 components (8 new sections), 8 page routes, dynamic detail pages, authentication modal, SEO schemas, image gallery, news system, price history chart. Total ~3,500 LOC |

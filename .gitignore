@@ -33,6 +33,5 @@ build-output.txt
 .vercel/
 .netlify/
 nul
-
-# Legacy reference codebases (read-only)
-reference/
+# reference/
+# reference/*/.git/repomix-output.xml
